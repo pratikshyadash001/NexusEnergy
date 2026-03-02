@@ -353,6 +353,29 @@
   <section class="page-sec" id="s-carbon">
     <div class="card" style="margin-bottom:18px">
       <div class="c-title">YOUR CARBON IMPACT</div>
+      <div class="metrics" style="margin-bottom:20px">
+        <div class="metric" style="--mc:var(--green)">
+          <div class="m-lbl">CO₂ Saved</div>
+          <div class="m-val" id="carbon-co2">0 kg</div>
+          <div class="m-sub">lifetime savings</div>
+        </div>
+        <div class="metric" style="--mc:var(--gold)">
+          <div class="m-lbl">Green Credits</div>
+          <div class="m-val" id="carbon-credits">0</div>
+          <div class="m-sub">earned from purchases</div>
+        </div>
+        <div class="metric" style="--mc:var(--cyan)">
+          <div class="m-lbl">Rank</div>
+          <div class="m-val" id="carbon-rank">GREEN</div>
+          <div class="m-sub">your tier</div>
+        </div>
+        <div class="metric" style="--mc:var(--violet)">
+          <div class="m-lbl">Trees Equivalent</div>
+          <div class="m-val" id="carbon-trees">0</div>
+          <div class="m-sub">planted offset</div>
+        </div>
+      </div>
+      
       <div class="carbon-ring-wrap">
         <div class="carbon-ring">
           <svg width="120" height="120" viewBox="0 0 120 120">
@@ -970,18 +993,32 @@ async function submitCreatePool() {
 // app.py /api/carbon returns: co2_kg, rank, green_credits, badges[]
 function renderCarbonSection(carbonData) {
   const co2  = carbonData?.co2_kg ?? myTxs.reduce((s, t) => s + (t.kwh || 0), 0) * 0.82;
+  const credits = carbonData?.green_credits ?? (co2 * 0.5).toFixed(1);
   const rank = carbonData?.rank || (co2 < 10 ? 'GREEN' : co2 < 50 ? 'SILVER' : co2 < 100 ? 'GOLD' : 'PLATINUM');
   const pct  = Math.min(100, (co2 / 200) * 100);
+  const treesEquivalent = Math.floor(co2 / 22); // Approx: 1 tree absorbs 22kg CO2 per year
 
-  document.getElementById('cr-val').textContent    = co2.toFixed(1);
-  document.getElementById('ci-rank').textContent   = `🌱 ${rank} TIER`;
+  // Update metrics
+  document.getElementById('carbon-co2').textContent = co2.toFixed(1) + ' kg';
+  document.getElementById('carbon-credits').textContent = credits;
+  document.getElementById('carbon-rank').textContent = rank;
+  document.getElementById('carbon-trees').textContent = treesEquivalent;
+  
+  // Update ring
+  document.getElementById('cr-val').textContent = co2.toFixed(1);
+  document.getElementById('ci-rank').textContent = `🌱 ${rank} TIER`;
   document.getElementById('carbon-ring-fill').setAttribute('stroke-dashoffset', (314 - (314 * pct / 100)).toFixed(1));
 
-  const titles = { GREEN: 'Carbon Newcomer', SILVER: 'Green Contributor', GOLD: 'Climate Advocate', PLATINUM: 'Platinum Guardian' };
+  const titles = { 
+    GREEN: 'Carbon Newcomer', 
+    SILVER: 'Green Contributor', 
+    GOLD: 'Climate Advocate', 
+    PLATINUM: 'Platinum Guardian' 
+  };
   document.getElementById('ci-title').textContent  = titles[rank] || 'Carbon Newcomer';
   document.getElementById('ci-desc').textContent   = rank === 'PLATINUM'
-    ? `🏆 Elite status! You've saved ${co2.toFixed(1)} kg CO₂ — equivalent to planting ${(co2/22).toFixed(0)} trees.`
-    : `Every kWh of renewable energy saves 0.82 kg CO₂. You've saved ${co2.toFixed(1)} kg — keep going!`;
+    ? `🏆 Elite status! You've saved ${co2.toFixed(1)} kg CO₂ — equivalent to planting ${treesEquivalent} trees this year.`
+    : `Every kWh of renewable energy saves 0.82 kg CO₂. You've saved ${co2.toFixed(1)} kg — equivalent to planting ${treesEquivalent} trees!`;
 
   // Badges from API or local
   const badges = carbonData?.badges || [

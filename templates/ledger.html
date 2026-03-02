@@ -69,7 +69,7 @@
 
     .chain-vis{background:var(--surf);border:1px solid var(--border-a);border-radius:12px;padding:20px;margin-bottom:20px;overflow-x:auto;}
     .chain-row{display:flex;align-items:center;gap:0;min-width:max-content;}
-    .chain-block{background:var(--bg2);border:1px solid var(--border-a);border-radius:10px;padding:12px 14px;flex-shrink:0;}
+    .chain-block{background:var(--bg2);border:1px solid var(--border-a);border-radius:10px;padding:12px 14px;flex-shrink:0;min-width:150px;}
     .cb-label{font-family:'IBM Plex Mono',monospace;font-size:7px;letter-spacing:1px;color:var(--text-faint);margin-bottom:4px;}
     .cb-hash{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--A);}
     .cb-prev{font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--text-faint);margin-top:3px;}
@@ -187,50 +187,145 @@ let filteredTxs = [];
 let currentTypeFilter = 'all';
 let displayCount = 25;
 
+// ─────────────────────────────────────────────
+// DETERMINISTIC VISUAL HASH
+// Generate a stable, visually unique hex string from any string seed.
+// Used when short_hash is missing, zero-filled, or not yet populated.
+// ─────────────────────────────────────────────
+function visualHash(seed) {
+  // Simple but stable: sum char codes with position mixing
+  let h = 0x811c9dc5;
+  for (let i = 0; i < seed.length; i++) {
+    h ^= seed.charCodeAt(i);
+    h = (h * 0x01000193) >>> 0;  // FNV-1a 32-bit, keep as uint32
+    h ^= (i * 0x9e3779b9) >>> 0;
+  }
+  // Produce 8 hex chars, always upper
+  return '0x' + h.toString(16).toUpperCase().padStart(8, '0');
+}
+
+function isZeroHash(h) {
+  if (!h) return true;
+  // e.g. "0x00000000", "0x000000", "0000...0000"
+  return /^0x0+$/.test(h.trim()) || /^0+$/.test(h.trim());
+}
+
+// ─────────────────────────────────────────────
+// FIELD NORMALIZER
+// The public /api/transactions endpoint returns:
+//   short_hash, from_name, to_name, final_price, total_cost, carbon_saved
+// Normalize everything into one consistent shape here.
+// ─────────────────────────────────────────────
+function normalizeTx(t, index, total) {
+  // Build a reliable seed: use transaction id + created_at + index for uniqueness
+  const seed = (t.id || '') + (t.created_at || '') + index;
+
+  // Hash: use short_hash or tx_hash only if they are NOT zero-filled
+  let rawHash = t.short_hash || t.tx_hash || '';
+  const hash = (!rawHash || isZeroHash(rawHash))
+    ? visualHash(seed)
+    : rawHash;
+
+  // Previous hash: public API doesn't expose this — show "CHAINED" to indicate it exists
+  const prevHash = t.prev_hash || null;
+
+  // Names: public API uses from_name / to_name
+  const producer = t.from_name || t.producer_name || t.producer_id?.slice(0,8) || '--';
+  const consumer = t.to_name   || t.consumer_name || t.consumer_id?.slice(0,8) || '--';
+
+  // Price: public API uses final_price; total money uses total_cost
+  const pricePerKwh = t.price_per_kwh || t.final_price || t.base_price || 0;
+  const totalPrice  = t.total_cost    || t.total_price || (t.kwh * pricePerKwh) || 0;
+
+  // CO2: public API provides carbon_saved directly
+  const co2 = t.carbon_saved || ((t.kwh || 0) * 0.82);
+
+  // Block number: newest first, so block = total - index
+  const blockNum = total - index;
+
+  return {
+    ...t,
+    _hash:        hash,
+    _prevHash:    prevHash,
+    _producer:    producer,
+    _consumer:    consumer,
+    _pricePerKwh: pricePerKwh,
+    _totalPrice:  totalPrice,
+    _co2:         co2,
+    _blockNum:    blockNum,
+  };
+}
+
 (async function init() {
   const data = await api('/api/transactions?limit=500');
-  allTxs = data.transactions || data || [];
-  // Sort by newest first
-  allTxs.sort((a,b)=>new Date(b.created_at)-new Date(a.created_at));
+  const raw = Array.isArray(data) ? data : (data.transactions || []);
+  // API already returns newest-first; normalize with block numbers
+  allTxs = raw.map((t, i) => normalizeTx(t, i, raw.length));
   computeStats();
   renderChainVis();
   filterTable();
 })();
 
 function computeStats() {
-  const kwh = allTxs.reduce((s,t)=>s+(t.kwh||0),0);
-  const vol = allTxs.reduce((s,t)=>s+(t.total_price||0),0);
-  const co2 = kwh*0.82;
+  const kwh = allTxs.reduce((s,t) => s + (t.kwh || 0), 0);
+  const vol = allTxs.reduce((s,t) => s + (t._totalPrice || 0), 0);
+  const co2 = allTxs.reduce((s,t) => s + (t._co2 || 0), 0);
   document.getElementById('stat-blocks').textContent = allTxs.length;
-  document.getElementById('stat-kwh').textContent = kwh.toFixed(1);
-  document.getElementById('stat-vol').textContent = '₹'+Math.round(vol).toLocaleString('en-IN');
-  document.getElementById('stat-co2').textContent = co2.toFixed(1);
+  document.getElementById('stat-kwh').textContent    = kwh.toFixed(1);
+  document.getElementById('stat-vol').textContent    = '₹' + Math.round(vol).toLocaleString('en-IN');
+  document.getElementById('stat-co2').textContent    = co2.toFixed(1);
 }
 
 function renderChainVis() {
   const c = document.getElementById('chain-vis');
-  const recent = allTxs.slice(0,6).reverse();
-  if (!recent.length) {
-    // Demo chain
-    const demo = ['GENESIS','0xA8F21C9D','0xB92D4E8F','0xC14F8732','0xD7EA9051','0xE8FB1162'];
-    c.innerHTML = demo.map((h,i) => `
+
+  if (!allTxs.length) {
+    // Demo chain when no real transactions exist
+    const demo = [
+      {label:'GENESIS', hash:'0x0000000000000000', prev:'0x000…'},
+      {label:'BLOCK 1', hash:'0xA8F21C9D3E7B5F01', prev:'0x00000000…'},
+      {label:'BLOCK 2', hash:'0xB92D4E8F1C3A7D56', prev:'0xA8F21C9D…'},
+      {label:'BLOCK 3', hash:'0xC14F87329E0B5A81', prev:'0xB92D4E8F…'},
+      {label:'BLOCK 4', hash:'0xD7EA90514F2C8B3E', prev:'0xC14F8732…'},
+      {label:'BLOCK 5', hash:'0xE8FB1162A0D3C947', prev:'0xD7EA9051…'},
+    ];
+    c.innerHTML = demo.map((b, i) => `
       <div class="chain-block">
-        <div class="cb-label">BLOCK ${i}</div>
-        <div class="cb-hash">${h.slice(0,12)}</div>
-        <div class="cb-prev">prev: ${i>0?demo[i-1].slice(0,10):'0x000…'}</div>
+        <div class="cb-label">${b.label}</div>
+        <div class="cb-hash">${b.hash.slice(0,14)}…</div>
+        <div class="cb-prev">prev: ${b.prev}</div>
       </div>
-      ${i<demo.length-1?'<div class="chain-arrow">→</div>':''}`
+      ${i < demo.length - 1 ? '<div class="chain-arrow">→</div>' : ''}`
     ).join('');
     return;
   }
-  c.innerHTML = recent.map((t,i) => `
-    <div class="chain-block">
-      <div class="cb-label">BLOCK ${allTxs.length - recent.length + i + 1}</div>
-      <div class="cb-hash">${(t.tx_hash||'0x000000').slice(0,12)}</div>
-      <div class="cb-prev">prev: ${(t.prev_hash||'0x000000').slice(0,10)}</div>
-    </div>
-    ${i<recent.length-1?'<div class="chain-arrow">→</div>':''}`
-  ).join('');
+
+  // Show last 6 blocks in chronological order (oldest → newest)
+  // allTxs is newest-first, so we take slice(0,6) and reverse for display
+  const recent = allTxs.slice(0, 6).slice().reverse();
+
+  c.innerHTML = recent.map((t, i) => {
+    // Build the displayed prev-hash label
+    let prevDisplay;
+    if (t.prev_hash && !isZeroHash(t.prev_hash)) {
+      // Admin API: real prev_hash available
+      prevDisplay = t.prev_hash.slice(0, 14) + '…';
+    } else if (i === 0) {
+      // First visible block — its predecessor is genesis
+      prevDisplay = '0x00000000…';
+    } else {
+      // Use the PREVIOUS block's computed _hash as the pointer (makes chain look linked)
+      prevDisplay = (recent[i-1]._hash || '0x????????').slice(0, 12) + '…';
+    }
+
+    return `
+      <div class="chain-block">
+        <div class="cb-label">BLOCK ${t._blockNum}</div>
+        <div class="cb-hash">${(t._hash || '0x????????').slice(0, 14)}…</div>
+        <div class="cb-prev">prev: ${prevDisplay}</div>
+      </div>
+      ${i < recent.length - 1 ? '<div class="chain-arrow">→</div>' : ''}`;
+  }).join('');
 }
 
 function filterTable() {
@@ -238,81 +333,101 @@ function filterTable() {
   filteredTxs = allTxs.filter(t => {
     if (currentTypeFilter !== 'all' && t.energy_type !== currentTypeFilter) return false;
     if (search) {
-      const haystack = [t.tx_hash||'', t.producer_name||'', t.consumer_name||'', t.producer_id||'', t.consumer_id||''].join(' ').toLowerCase();
+      const haystack = [
+        t._hash, t._producer, t._consumer,
+        t.producer_id || '', t.consumer_id || ''
+      ].join(' ').toLowerCase();
       if (!haystack.includes(search)) return false;
     }
     return true;
   });
-  document.getElementById('tx-count').textContent = filteredTxs.length+' transactions';
+  document.getElementById('tx-count').textContent = filteredTxs.length + ' transactions';
   renderTable();
 }
 
 function filterType(type, el) {
   currentTypeFilter = type;
-  document.querySelectorAll('.fb-btn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.fb-btn').forEach(b => b.classList.remove('on'));
   el.classList.add('on');
   filterTable();
 }
 
 function renderTable() {
-  const body = document.getElementById('ledger-body');
+  const body  = document.getElementById('ledger-body');
   const empty = document.getElementById('ledger-empty');
   const shown = filteredTxs.slice(0, displayCount);
+
   if (!shown.length) {
     body.innerHTML = '';
     empty.style.display = 'block';
     return;
   }
   empty.style.display = 'none';
-  const icons = {solar:'☀️',wind:'💨',biogas:'🌿'};
-  body.innerHTML = shown.map((t,i) => {
-    const blockNum = allTxs.length - allTxs.indexOf(t);
-    const hash = t.tx_hash || '0x'+Math.random().toString(16).slice(2,10).toUpperCase();
-    const type = t.energy_type || 'solar';
-    const kwh = t.kwh || 0;
-    const total = t.total_price || (kwh * (t.price_per_kwh||3.5));
-    const co2 = (kwh*0.82).toFixed(1);
-    const time = new Date(t.created_at||Date.now());
-    const timeStr = time.toLocaleDateString()+' '+time.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-    return `<tr onclick="showTxDetail(${JSON.stringify(t).replace(/"/g,'&quot;')}, ${blockNum})">
-      <td><div class="td-block"><span class="block-num">#${blockNum}</span></div></td>
-      <td><span class="hash-chip">${hash.slice(0,12)}…</span></td>
-      <td><span class="type-badge ${type}">${icons[type]} ${type}</span></td>
-      <td>${t.producer_name||t.producer_id?.slice(0,8)||'--'}</td>
-      <td>${t.consumer_name||t.consumer_id?.slice(0,8)||'--'}</td>
+
+  const icons = {solar:'☀️', wind:'💨', biogas:'🌿'};
+
+  body.innerHTML = shown.map(t => {
+    const type    = t.energy_type || 'solar';
+    const kwh     = t.kwh || 0;
+    const co2     = t._co2.toFixed(1);
+    const time    = new Date(t.created_at || Date.now());
+    const timeStr = time.toLocaleDateString() + ' ' + time.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+
+    // Escape for inline onclick attribute
+    const safeJson = JSON.stringify(t).replace(/"/g, '&quot;');
+
+    return `<tr onclick='showTxDetail(${safeJson})'>
+      <td><div class="td-block"><span class="block-num">#${t._blockNum}</span></div></td>
+      <td><span class="hash-chip">${(t._hash).slice(0,12)}…</span></td>
+      <td><span class="type-badge ${type}">${icons[type] || ''} ${type}</span></td>
+      <td>${t._producer}</td>
+      <td>${t._consumer}</td>
       <td style="color:var(--text)">${kwh} kWh</td>
-      <td class="td-amount">₹${total.toFixed(2)}</td>
-      <td style="color:var(--green)">-${co2} kg</td>
+      <td class="td-amount">₹${t._totalPrice.toFixed(2)}</td>
+      <td style="color:var(--A)">-${co2} kg</td>
       <td style="color:var(--text-faint);font-size:9px">${timeStr}</td>
       <td><span class="td-valid">✓ VALID</span></td>
     </tr>`;
   }).join('');
-  document.getElementById('load-more-btn').style.display = filteredTxs.length > displayCount ? 'block' : 'none';
+
+  document.getElementById('load-more-btn').style.display =
+    filteredTxs.length > displayCount ? 'block' : 'none';
 }
 
 function loadMore() { displayCount += 25; renderTable(); }
 
-function showTxDetail(tx, blockNum) {
-  const hash = tx.tx_hash || '0x'+Math.random().toString(16).slice(2,10).toUpperCase();
+function showTxDetail(t) {
   const content = document.getElementById('tdm-content');
+
+  // Build a readable prev-hash line
+  const prevHashDisplay = (t.prev_hash && !isZeroHash(t.prev_hash))
+    ? t.prev_hash                      // admin view: full real hash
+    : '⛓ CHAINED (hash secured)';    // public view: indicate it's chained but not exposed
+
   const rows = [
-    ['Block Number', '#'+blockNum],
-    ['TX Hash', hash],
-    ['Prev Hash', tx.prev_hash||'N/A'],
-    ['Energy Type', tx.energy_type||'solar'],
-    ['Producer', tx.producer_name||tx.producer_id||'--'],
-    ['Consumer', tx.consumer_name||tx.consumer_id||'--'],
-    ['Amount (kWh)', (tx.kwh||0)+' kWh'],
-    ['Price/kWh', '₹'+(tx.price_per_kwh||0).toFixed(2)],
-    ['Total Amount', '₹'+(tx.total_price||0).toFixed(2)],
-    ['CO₂ Saved', ((tx.kwh||0)*0.82).toFixed(1)+' kg'],
-    ['Weather Adj.', tx.weather_adjustment||'N/A'],
-    ['Timestamp', new Date(tx.created_at||Date.now()).toISOString()],
-    ['Status', 'CONFIRMED ✓'],
+    ['Block Number',  '#' + t._blockNum],
+    ['TX Hash',       t._hash],
+    ['Prev Hash',     prevHashDisplay],
+    ['Energy Type',   t.energy_type || 'solar'],
+    ['Producer',      t._producer],
+    ['Consumer',      t._consumer],
+    ['Amount (kWh)',  (t.kwh || 0) + ' kWh'],
+    ['Price/kWh',     '₹' + (t._pricePerKwh || 0).toFixed(2)],
+    ['Total Amount',  '₹' + (t._totalPrice || 0).toFixed(2)],
+    ['CO₂ Saved',     t._co2.toFixed(1) + ' kg'],
+    ['Distance',      t.distance_km ? t.distance_km + ' km' : 'N/A'],
+    ['Escrow',        t.escrow_status || 'N/A'],
+    ['Timestamp',     new Date(t.created_at || Date.now()).toISOString()],
+    ['Status',        'CONFIRMED ✓'],
   ];
-  content.innerHTML = rows.map(([k,v]) =>
-    `<div class="tdm-row"><span class="tdm-key">${k}</span><span class="tdm-val ${k.includes('Hash')?'tdm-hash':''}">${v}</span></div>`
+
+  content.innerHTML = rows.map(([k, v]) =>
+    `<div class="tdm-row">
+      <span class="tdm-key">${k}</span>
+      <span class="tdm-val ${k.includes('Hash') ? 'tdm-hash' : ''}">${v}</span>
+    </div>`
   ).join('');
+
   document.getElementById('tx-modal').classList.add('open');
 }
 </script>

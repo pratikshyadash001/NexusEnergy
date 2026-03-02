@@ -21,12 +21,9 @@
     *{box-sizing:border-box;margin:0;padding:0;}
     body{background:var(--bg);color:var(--text);font-family:'Mulish',sans-serif;overflow:hidden;}
     ::-webkit-scrollbar{width:3px;} ::-webkit-scrollbar-thumb{background:var(--border-a);border-radius:2px;}
-
     body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
       background:radial-gradient(ellipse 700px 500px at 100% -10%,rgba(0,206,212,0.08) 0%,transparent 60%),
                  radial-gradient(ellipse 400px 400px at 0% 100%,rgba(139,92,246,0.06) 0%,transparent 60%);}
-
-    /* ─── SIDEBAR ─── */
     .sidebar{position:fixed;left:0;top:0;bottom:0;width:var(--sidebar-w);
       background:rgba(6,9,24,0.97);border-right:1px solid var(--border-a);
       display:flex;flex-direction:column;padding:24px 0;z-index:200;backdrop-filter:blur(20px);}
@@ -34,14 +31,12 @@
     .s-brand-icon{width:38px;height:38px;background:linear-gradient(135deg,var(--A),#00A8B0);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;}
     .s-brand-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;letter-spacing:2px;}
     .s-brand-role{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--A);background:var(--A-d);padding:2px 8px;border-radius:3px;margin-top:3px;}
-
     .s-section{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--text-faint);padding:0 20px 8px;text-transform:uppercase;}
     .nav{display:flex;align-items:center;gap:11px;padding:10px 20px;font-family:'Mulish',sans-serif;font-size:13px;font-weight:500;color:var(--text-dim);cursor:pointer;border-left:2px solid transparent;transition:all 0.15s;}
     .nav:hover{color:var(--text);background:rgba(255,255,255,0.03);}
     .nav.on{color:var(--A);border-left-color:var(--A);background:var(--A-d);}
     .nav .ni{font-size:15px;width:20px;text-align:center;}
     .s-spacer{flex:1;}
-
     .s-weather{margin:0 12px 12px;padding:14px;background:var(--surf);border:1px solid var(--border-a);border-radius:12px;}
     .sw-label{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--text-faint);margin-bottom:8px;}
     .sw-temp{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;color:var(--A);line-height:1;}
@@ -49,15 +44,12 @@
     .sw-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:8px;}
     .sw-item{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-faint);}
     .sw-item span{color:var(--text-dim);}
-
     .s-user{margin:0 12px 10px;padding:12px;background:var(--surf);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;gap:10px;}
     .s-avatar{width:38px;height:38px;background:var(--A-d);border:2px solid var(--border-a);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
     .s-uname{font-family:'Mulish',sans-serif;font-weight:600;font-size:12px;}
     .s-urole{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:1px;color:var(--A);background:var(--A-d);padding:2px 7px;border-radius:3px;margin-top:3px;display:inline-block;}
     .s-logout{margin:0 12px 16px;padding:9px;display:flex;align-items:center;justify-content:center;gap:7px;background:rgba(244,63,94,0.08);border:1px solid rgba(244,63,94,0.2);border-radius:8px;color:var(--rose);font-family:'Mulish',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.2s;}
     .s-logout:hover{background:rgba(244,63,94,0.15);transform:translateY(-1px);}
-
-    /* ─── MAIN ─── */
     .main{margin-left:var(--sidebar-w);height:100vh;overflow-y:auto;padding:28px 28px 40px;position:relative;z-index:10;}
     .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
     .page-h{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;letter-spacing:-0.5px;}
@@ -66,10 +58,7 @@
     .w-pill{display:flex;align-items:center;gap:8px;background:var(--surf);border:1px solid var(--border-a);border-radius:8px;padding:8px 14px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--A);}
     .btn-primary{padding:9px 18px;background:linear-gradient(135deg,var(--A),#00A8B0);color:var(--bg);font-family:'Syne',sans-serif;font-size:14px;font-weight:700;border:none;border-radius:8px;cursor:pointer;transition:all 0.2s;}
     .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,206,212,0.3);}
-
     .policy-bar{padding:10px 16px;background:rgba(245,166,35,0.06);border:1px solid rgba(245,166,35,0.2);border-radius:8px;display:flex;align-items:center;gap:12px;margin-bottom:20px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(245,166,35,0.8);}
-
-    /* METRICS */
     .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:22px;}
     .metric{padding:18px 20px;background:var(--surf);border:1px solid var(--border);border-radius:12px;position:relative;overflow:hidden;transition:all 0.2s;}
     .metric::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--mc,var(--A));}
@@ -77,20 +66,15 @@
     .m-lbl{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--text-faint);text-transform:uppercase;margin-bottom:8px;}
     .m-val{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;line-height:1;color:var(--mc,var(--A));}
     .m-sub{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-faint);margin-top:5px;}
-
     .grid2{display:grid;grid-template-columns:1.3fr 1fr;gap:18px;margin-bottom:18px;}
     .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-bottom:18px;}
-
     .card{background:var(--surf);border:1px solid var(--border);border-radius:14px;padding:20px;transition:border-color 0.2s;}
     .card:hover{border-color:var(--border-a);}
     .c-title{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--text-faint);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;}
     .c-title a{color:var(--A);text-decoration:none;font-size:9px;cursor:pointer;}
-
-    /* PRODUCER LISTINGS */
     .source-filter{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
     .sf-btn{padding:5px 14px;background:var(--surf);border:1px solid var(--border);border-radius:20px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-dim);cursor:pointer;transition:all 0.15s;}
     .sf-btn.on{background:var(--A-d);border-color:var(--border-a);color:var(--A);}
-
     .listing-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
     .listing-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;transition:all 0.2s;cursor:pointer;}
     .listing-card:hover{border-color:var(--border-a);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,206,212,0.08);}
@@ -106,24 +90,22 @@
     .lc-meta{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-bottom:12px;}
     .lc-meta-item{font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-faint);}
     .lc-meta-item span{color:var(--text-dim);}
+    .lc-dir{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:8px;padding:2px 6px;border-radius:3px;margin-bottom:8px;}
+    .lc-dir.up{background:rgba(244,63,94,0.1);color:var(--rose);}
+    .lc-dir.down{background:rgba(16,185,129,0.1);color:var(--green);}
+    .lc-dir.neutral{background:rgba(245,166,35,0.1);color:var(--gold);}
     .lc-buy-btn{width:100%;padding:8px;background:linear-gradient(135deg,rgba(0,206,212,0.15),rgba(0,206,212,0.08));border:1px solid var(--border-a);color:var(--A);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;border-radius:7px;cursor:pointer;transition:all 0.2s;}
     .lc-buy-btn:hover{background:linear-gradient(135deg,rgba(0,206,212,0.25),rgba(0,206,212,0.15));transform:translateY(-1px);}
-
-    /* SMART ADVISOR */
     .advisor-box{padding:18px;background:linear-gradient(135deg,rgba(0,206,212,0.06),rgba(139,92,246,0.04));border:1px solid var(--border-a);border-radius:12px;margin-bottom:16px;}
     .adv-label{font-family:'IBM Plex Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--A);margin-bottom:8px;}
     .adv-rec{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:6px;}
     .adv-reason{font-family:'Mulish',sans-serif;font-size:12px;color:var(--text-dim);line-height:1.5;}
-
-    /* PRICE FORECAST */
     .forecast-bar{display:flex;gap:6px;align-items:flex-end;height:60px;margin-top:8px;}
     .fb-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;}
     .fb-bar{width:100%;border-radius:3px 3px 0 0;background:var(--A-g);border:1px solid var(--border-a);transition:height 0.3s;}
     .fb-bar.best{background:linear-gradient(to top,rgba(0,206,212,0.4),rgba(0,206,212,0.2));border-color:var(--A);}
     .fb-time{font-family:'IBM Plex Mono',monospace;font-size:7px;color:var(--text-faint);}
     .fb-price{font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--A);}
-
-    /* POOLS */
     .pool-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px;transition:border-color 0.2s;}
     .pool-card:hover{border-color:var(--border-a);}
     .pool-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
@@ -135,8 +117,6 @@
     .pool-join-btn{margin-top:10px;width:100%;padding:7px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.25);color:var(--green);font-family:'Syne',sans-serif;font-size:12px;font-weight:700;border-radius:7px;cursor:pointer;transition:all 0.2s;}
     .pool-join-btn:hover{background:rgba(16,185,129,0.15);}
     .pool-join-btn:disabled{opacity:0.4;cursor:default;}
-
-    /* CARBON */
     .carbon-ring-wrap{display:flex;align-items:center;gap:24px;margin-bottom:20px;}
     .carbon-ring{position:relative;width:120px;height:120px;flex-shrink:0;}
     .carbon-ring svg{transform:rotate(-90deg);}
@@ -147,13 +127,10 @@
     .ci-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:4px;}
     .ci-rank{display:inline-block;font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;padding:3px 10px;border-radius:4px;background:rgba(16,185,129,0.1);color:var(--green);margin-bottom:8px;}
     .ci-desc{font-family:'Mulish',sans-serif;font-size:12px;color:var(--text-dim);line-height:1.5;}
-
     .badges-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;}
     .badge{display:flex;align-items:center;gap:6px;background:var(--surf);border:1px solid var(--border);border-radius:8px;padding:8px 12px;font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-faint);transition:all 0.2s;}
     .badge.earned{border-color:rgba(16,185,129,0.3);background:rgba(16,185,129,0.06);color:var(--green);}
     .badge-icon{font-size:16px;}
-
-    /* TX HISTORY */
     .tx-list{display:flex;flex-direction:column;gap:8px;}
     .tx-row{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px;display:flex;align-items:center;gap:14px;transition:border-color 0.15s;}
     .tx-row:hover{border-color:var(--border-a);}
@@ -167,15 +144,9 @@
     .tx-right{text-align:right;}
     .tx-amount{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--rose);}
     .tx-hash{font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--text-faint);margin-top:2px;}
-
-    /* MAP */
     #consumer-map{border-radius:12px;overflow:hidden;height:340px;border:1px solid var(--border);}
-
-    /* PAGE SECTIONS */
     .page-sec{display:none;}
     .page-sec.on{display:block;}
-
-    /* MODAL */
     .modal-overlay{position:fixed;inset:0;background:rgba(6,9,24,0.85);backdrop-filter:blur(8px);z-index:1000;display:none;align-items:center;justify-content:center;}
     .modal-overlay.open{display:flex;}
     .modal{background:var(--bg2);border:1px solid var(--border-a);border-radius:16px;padding:28px;width:420px;max-width:95vw;}
@@ -194,17 +165,11 @@
     .btn-cancel{flex:1;padding:10px;background:var(--surf);border:1px solid var(--border);border-radius:8px;color:var(--text-dim);font-family:'Mulish',sans-serif;font-size:13px;cursor:pointer;}
     .btn-confirm{flex:1.5;padding:10px;background:linear-gradient(135deg,var(--A),#00A8B0);border:none;border-radius:8px;color:var(--bg);font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;}
     .btn-confirm:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,206,212,0.3);}
-
-    /* LOGOUT MODAL */
     .logout-modal{background:var(--bg2);border:1px solid rgba(244,63,94,0.3);border-radius:16px;padding:28px;width:360px;}
     .logout-modal .modal-title{color:var(--rose);}
     .btn-logout-confirm{flex:1.5;padding:10px;background:linear-gradient(135deg,var(--rose),#d63851);border:none;border-radius:8px;color:white;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;}
-
-    /* TOAST */
     .toast{position:fixed;bottom:24px;right:24px;background:var(--bg2);border:1px solid var(--border-a);border-radius:10px;padding:12px 18px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--A);z-index:2000;transform:translateY(100px);opacity:0;transition:all 0.3s;}
     .toast.show{transform:translateY(0);opacity:1;}
-
-    /* ARIA CHAT */
     .aria-input-row{display:flex;gap:8px;margin-top:12px;}
     .aria-input{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'Mulish',sans-serif;font-size:13px;outline:none;}
     .aria-input:focus{border-color:var(--border-a);}
@@ -218,7 +183,6 @@
 </head>
 <body>
 
-<!-- SIDEBAR -->
 <aside class="sidebar">
   <div class="s-brand">
     <div class="s-brand-icon">⚡</div>
@@ -227,7 +191,6 @@
       <div class="s-brand-role">CONSUMER</div>
     </div>
   </div>
-
   <div class="s-section">Navigation</div>
   <div class="nav on" onclick="goTo('overview',this)"><span class="ni">📊</span> Overview</div>
   <div class="nav" onclick="goTo('market',this)"><span class="ni">🛒</span> Marketplace</div>
@@ -236,21 +199,18 @@
   <div class="nav" onclick="goTo('history',this)"><span class="ni">📋</span> Purchase History</div>
   <div class="nav" onclick="goTo('carbon',this)"><span class="ni">🌿</span> Carbon Impact</div>
   <div class="nav" onclick="goTo('aria',this)"><span class="ni">🤖</span> ARIA Advisor</div>
-
   <div class="s-spacer"></div>
-
   <div class="s-weather" id="sw">
     <div class="sw-label">LIVE WEATHER</div>
     <div class="sw-temp" id="sw-temp">--°</div>
     <div class="sw-cond" id="sw-cond">Loading…</div>
     <div class="sw-grid">
-      <div class="sw-item">☁️ <span id="sw-cloud">--%</span></div>
-      <div class="sw-item">💨 <span id="sw-wind">-- km/h</span></div>
-      <div class="sw-item">💧 <span id="sw-hum">--%</span></div>
+      <div class="sw-item">☁️ <span id="sw-cloud">--</span>%</div>
+      <div class="sw-item">💨 <span id="sw-wind">--</span> km/h</div>
+      <div class="sw-item">💧 <span id="sw-hum">--</span>%</div>
       <div class="sw-item">📍 <span id="sw-city">…</span></div>
     </div>
   </div>
-
   <div class="s-user">
     <div class="s-avatar" id="s-avatar">👤</div>
     <div>
@@ -261,7 +221,6 @@
   <div class="s-logout" onclick="showLogoutModal()">🚪 Sign Out</div>
 </aside>
 
-<!-- MAIN -->
 <main class="main">
   <div class="topbar">
     <div class="page-h" id="page-h">Consumer <span>Overview</span></div>
@@ -278,7 +237,7 @@
     Bulk Discount (≥50 kWh): <strong>−8%</strong>
   </div>
 
-  <!-- ── OVERVIEW ── -->
+  <!-- OVERVIEW -->
   <section class="page-sec on" id="s-overview">
     <div class="metrics">
       <div class="metric">
@@ -306,7 +265,7 @@
     <div class="grid2">
       <div class="card">
         <div class="c-title">SMART SOURCE ADVISOR <a onclick="refreshAdvisor()">↻ REFRESH</a></div>
-        <div class="advisor-box" id="advisor-box">
+        <div class="advisor-box">
           <div class="adv-label">🤖 ARIA RECOMMENDATION</div>
           <div class="adv-rec" id="adv-rec">Analysing weather conditions…</div>
           <div class="adv-reason" id="adv-reason">Checking live cloud cover, wind speed, and current pricing…</div>
@@ -314,7 +273,6 @@
         <div class="c-title" style="margin-top:16px">PRICE FORECAST — NEXT 6H</div>
         <div class="forecast-bar" id="forecast-bar"></div>
       </div>
-
       <div class="card">
         <div class="c-title">RECENT PURCHASES</div>
         <div class="tx-list" id="overview-tx"></div>
@@ -326,11 +284,13 @@
         <div class="c-title">☀️ SOLAR RATE</div>
         <div style="font-family:'Syne',sans-serif;font-size:30px;font-weight:700;color:var(--gold)" id="rate-solar">₹--</div>
         <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-faint);margin-top:4px">per kWh · weather-adjusted</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--text-faint);margin-top:4px" id="rate-solar-reason"></div>
       </div>
       <div class="card">
         <div class="c-title">💨 WIND RATE</div>
         <div style="font-family:'Syne',sans-serif;font-size:30px;font-weight:700;color:var(--A)" id="rate-wind">₹--</div>
         <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-faint);margin-top:4px">per kWh · weather-adjusted</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--text-faint);margin-top:4px" id="rate-wind-reason"></div>
       </div>
       <div class="card" style="--border-a:rgba(16,185,129,0.3)">
         <div class="c-title">🌿 BIOGAS RATE</div>
@@ -340,7 +300,7 @@
     </div>
   </section>
 
-  <!-- ── MARKETPLACE ── -->
+  <!-- MARKETPLACE -->
   <section class="page-sec" id="s-market">
     <div class="source-filter">
       <div class="sf-btn on" onclick="filterListings('all',this)">All Sources</div>
@@ -351,7 +311,7 @@
     <div id="listings-container" class="listing-grid"></div>
   </section>
 
-  <!-- ── ENERGY POOLS ── -->
+  <!-- POOLS -->
   <section class="page-sec" id="s-pools">
     <div class="grid2">
       <div>
@@ -373,7 +333,7 @@
     </div>
   </section>
 
-  <!-- ── MAP ── -->
+  <!-- MAP -->
   <section class="page-sec" id="s-map">
     <div class="card" style="padding:16px">
       <div class="c-title">PRODUCER GRID MAP — CLICK NODE TO BUY</div>
@@ -381,7 +341,7 @@
     </div>
   </section>
 
-  <!-- ── HISTORY ── -->
+  <!-- HISTORY -->
   <section class="page-sec" id="s-history">
     <div class="card">
       <div class="c-title">PURCHASE HISTORY <a onclick="loadMyTxs()">↻ REFRESH</a></div>
@@ -389,7 +349,7 @@
     </div>
   </section>
 
-  <!-- ── CARBON ── -->
+  <!-- CARBON -->
   <section class="page-sec" id="s-carbon">
     <div class="card" style="margin-bottom:18px">
       <div class="c-title">YOUR CARBON IMPACT</div>
@@ -418,7 +378,7 @@
     </div>
   </section>
 
-  <!-- ── ARIA ── -->
+  <!-- ARIA -->
   <section class="page-sec" id="s-aria">
     <div class="grid2">
       <div class="card">
@@ -449,17 +409,18 @@
 <div class="modal-overlay" id="buy-modal">
   <div class="modal">
     <div class="modal-title">Purchase Energy</div>
-    <div class="modal-sub" id="buy-sub">from <span id="buy-from">--</span></div>
+    <div class="modal-sub">from <span id="buy-from" style="color:var(--A)">--</span></div>
     <div class="form-row">
       <div class="form-label">AMOUNT (KWH)</div>
       <input class="form-input" id="buy-kwh" type="number" min="1" max="500" value="10" oninput="updateBuyPrice()"/>
     </div>
-    <div class="modal-price-box" id="buy-price-box">
+    <div class="modal-price-box">
       <div class="mpb-row"><span>Base Price</span><span id="bp-base">--</span></div>
       <div class="mpb-row"><span>Weather Adjustment</span><span id="bp-weather">--</span></div>
       <div class="mpb-row"><span>Govt Subsidy</span><span id="bp-subsidy">--</span></div>
       <div class="mpb-row"><span id="bp-bulk-lbl">Bulk Discount</span><span id="bp-bulk">--</span></div>
-      <div class="mpb-row"><span>CO₂ Saved</span><span id="bp-co2">--</span></div>
+      <div class="mpb-row"><span>Platform Fee</span><span id="bp-platform">--</span></div>
+      <div class="mpb-row"><span>CO₂ Saved</span><span id="bp-co2" style="color:var(--green)">--</span></div>
       <div class="mpb-total"><span>Total Amount</span><span id="bp-total">₹--</span></div>
     </div>
     <div class="modal-btns">
@@ -513,54 +474,50 @@
 
 <script>
 // ─── AUTH ─────────────────────────────────────────
-let user = JSON.parse(localStorage.getItem('nx_user')||'null');
-let token = localStorage.getItem('nx_token')||'';
+// Always read fresh from localStorage — never cache in a variable that can go stale
+function getToken() { return localStorage.getItem('nx_token') || ''; }
+function getUser()  { return JSON.parse(localStorage.getItem('nx_user') || 'null'); }
+
+const user = getUser();
 if (!user || (user.role !== 'consumer' && user.role !== 'demo')) {
   window.location.href = '/';
 }
 
-// Populate sidebar
-document.getElementById('s-uname').textContent = user?.name || 'Consumer';
-const av = user?.name?.[0]?.toUpperCase() || '👤';
-document.getElementById('s-avatar').textContent = av;
+document.getElementById('s-uname').textContent = user?.name || user?.full_name || 'Consumer';
+document.getElementById('s-avatar').textContent = (user?.name || user?.full_name || 'C')[0].toUpperCase();
 
-const api = (url, opt={}) => fetch(url, {
-  ...opt,
-  headers: {'Content-Type':'application/json','Authorization':'Bearer '+token, ...(opt.headers||{})}
-}).then(r=>r.json()).catch(()=>({}));
+// api() always reads fresh token — survives Flask restarts
+function api(url, opt = {}) {
+  return fetch(url, {
+    ...opt,
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + getToken(),
+      ...(opt.headers || {})
+    }
+  }).then(r => r.json()).catch(() => ({}));
+}
 
 // ─── STATE ────────────────────────────────────────
 let allListings = [];
 let myTxs = [];
 let currentFilter = 'all';
-let selectedListing = null;
+let activeListing = null;
 let weatherData = {};
 let mapConsumer = null;
 
 // ─── INIT ─────────────────────────────────────────
 (async function init() {
-  const [wx, listings, txs, carbon] = await Promise.all([
-    api('/api/weather'),
-    api('/api/listings'),
-    api('/api/transactions?limit=50'),
+  const [wx, listings, carbon] = await Promise.all([
+    api(`/api/weather?lat=${user?.location_lat||22.7196}&lon=${user?.location_lon||75.8577}`),
+    api(`/api/listings?lat=${user?.location_lat||22.7196}&lon=${user?.location_lon||75.8577}`),
     api('/api/carbon')
   ]);
 
   weatherData = wx;
-  allListings = listings.listings || listings || [];
-  
-  // Load saved transactions from localStorage first
-  try {
-    const savedTxs = localStorage.getItem('nexus_my_txs');
-    if (savedTxs) {
-      myTxs = JSON.parse(savedTxs);
-      console.log(`Loaded ${myTxs.length} saved transactions`);
-    }
-  } catch (e) {
-    console.error('Error loading saved transactions:', e);
-  }
-  
-  // Then load from API and merge
+  // app.py /api/listings returns array directly (enriched with current_price etc.)
+  allListings = Array.isArray(listings) ? listings : (listings.listings || []);
+
   await loadMyTxs();
 
   updateWeatherUI(wx);
@@ -569,103 +526,123 @@ let mapConsumer = null;
   renderAdvisor(wx);
   renderForecast(wx);
   renderOverviewTx();
-  renderHistoryTx();
   renderCarbonSection(carbon);
-
-  // Listen for kwh change to update buy modal
-  document.getElementById('buy-kwh').addEventListener('input', updateBuyPrice);
 })();
 
 // ─── WEATHER ──────────────────────────────────────
+// app.py fetch_weather() already converts wind to km/h and returns as wind_speed
+// DO NOT multiply by 3.6 again
 function updateWeatherUI(wx) {
   if (!wx || wx.error) return;
-  const t = Math.round(wx.temperature || wx.temp || 0);
-  const cl = wx.clouds || wx.cloud_pct || 0;
-  const wi = Math.round((wx.wind_speed||0)*3.6);
-  const hum = wx.humidity || 0;
-  const city = wx.city || wx.location || 'Indore';
-  document.getElementById('sw-temp').textContent = t+'°';
-  document.getElementById('sw-cond').textContent = wx.description || wx.condition || '–';
-  document.getElementById('sw-cloud').textContent = cl+'%';
-  document.getElementById('sw-wind').textContent = wi+' km/h';
-  document.getElementById('sw-hum').textContent = hum+'%';
-  document.getElementById('sw-city').textContent = city;
-  document.getElementById('w-pill-top').textContent = `${wx.icon||'⛅'} ${t}°C — ${cl}% cloud`;
+  const t    = Math.round(wx.temp || 0);
+  const cl   = wx.clouds ?? 0;          // can be 0 on clear days — that's real data
+  const wi   = Math.round(wx.wind_speed || 0);   // already km/h from app.py
+  const hum  = wx.humidity || 0;
+  const city = wx.city || 'Indore';
+
+  document.getElementById('sw-temp').textContent  = t + '°';
+  document.getElementById('sw-cond').textContent  = wx.condition || '–';
+  document.getElementById('sw-cloud').textContent = cl;
+  document.getElementById('sw-wind').textContent  = wi;
+  document.getElementById('sw-hum').textContent   = hum;
+  document.getElementById('sw-city').textContent  = city;
+  document.getElementById('w-pill-top').textContent = `${wx.icon || '⛅'} ${t}°C — ${cl}% cloud`;
+}
+
+function refreshAdvisor() {
+  api(`/api/weather?lat=${user?.location_lat||22.7196}&lon=${user?.location_lon||75.8577}`)
+    .then(wx => { weatherData = wx; updateWeatherUI(wx); renderAdvisor(wx); renderForecast(wx); updateRates(wx); });
 }
 
 // ─── RATES ────────────────────────────────────────
+// Use listings from API (they already have current_price from backend pricing engine)
+// Fall back to local calculation if no listings available
 function updateRates(wx) {
-  const cloud = wx?.clouds || wx?.cloud_pct || 30;
-  const wind = (wx?.wind_speed||2)*3.6;
+  const cloud = wx?.clouds ?? 30;
+  const wind  = wx?.wind_speed ?? 14.4;   // already km/h
 
-  let solar = 3.20;
-  if (cloud < 20) solar -= 1.50; else if (cloud > 70) solar += 2.50;
-  solar -= 0.50; // subsidy
-  solar = Math.max(1.5, Math.min(12, solar));
+  // Try to get prices from actual listings first
+  const solar  = allListings.filter(l => l.energy_type === 'solar');
+  const windL  = allListings.filter(l => l.energy_type === 'wind');
+  const biogas = allListings.filter(l => l.energy_type === 'biogas');
 
-  let windR = 3.80;
-  if (wind > 25) windR -= 2.50; else if (wind < 5) windR += 2.20;
-  windR -= 0.30;
-  windR = Math.max(1.5, Math.min(12, windR));
+  const avg = arr => arr.length ? arr.reduce((s,l)=>s+(l.current_price||l.base_price||0),0)/arr.length : null;
 
-  let biogas = 4.50 - 0.20;
+  const solarRate  = avg(solar)  ?? calcRate('solar', 3.0, cloud, wind);
+  const windRate   = avg(windL)  ?? calcRate('wind', 3.5, cloud, wind);
+  const biogasRate = avg(biogas) ?? calcRate('biogas', 4.0, cloud, wind);
 
-  document.getElementById('rate-solar').textContent = '₹'+solar.toFixed(2);
-  document.getElementById('rate-wind').textContent = '₹'+windR.toFixed(2);
-  document.getElementById('rate-biogas').textContent = '₹'+biogas.toFixed(2);
+  document.getElementById('rate-solar').textContent  = '₹' + solarRate.toFixed(2);
+  document.getElementById('rate-wind').textContent   = '₹' + windRate.toFixed(2);
+  document.getElementById('rate-biogas').textContent = '₹' + biogasRate.toFixed(2);
+
+  // Show price direction reason
+  if (document.getElementById('rate-solar-reason')) {
+    document.getElementById('rate-solar-reason').textContent = cloud < 20 ? '↓ Clear sky surplus' : cloud > 70 ? '↑ Cloud cover premium' : '◉ Moderate conditions';
+    document.getElementById('rate-wind-reason').textContent  = wind > 25 ? '↓ Wind surplus' : wind < 5 ? '↑ Calm wind premium' : '◉ Moderate conditions';
+  }
+}
+
+// Local fallback rate calculation (mirrors app.py calculate_price logic)
+function calcRate(type, base, cloud, wind) {
+  let mod = 0;
+  const subsidies = { solar: 0.50, wind: 0.30, biogas: 0.20 };
+  if (type === 'solar') {
+    if (cloud < 20)      mod = -1.5;
+    else if (cloud < 40) mod = -0.6;
+    else if (cloud < 70) mod =  0.8;
+    else                 mod =  2.2;
+  } else if (type === 'wind') {
+    if (wind > 25)      mod = -2.2;
+    else if (wind > 15) mod = -1.0;
+    else if (wind < 5)  mod =  2.0;
+  }
+  const platformFee = (base + mod - subsidies[type]) * 0.015;
+  return Math.max(1.5, Math.min(12, base + mod - subsidies[type] + platformFee));
 }
 
 // ─── ADVISOR ──────────────────────────────────────
 function renderAdvisor(wx) {
-  const cloud = wx?.clouds || wx?.cloud_pct || 30;
-  const wind = (wx?.wind_speed||2)*3.6;
+  const cloud = wx?.clouds ?? 30;
+  const wind  = wx?.wind_speed ?? 14.4;   // already km/h
   let rec, reason;
-  if (cloud < 30 && wind < 15) {
-    rec = '☀️ Buy Solar Now — Best Value';
-    reason = `Clear skies (${cloud}% cloud) are driving solar surplus. Prices are ~₹1.50/kWh below baseline. Wind is calm so solar is your best bet.`;
-  } else if (wind > 25) {
-    rec = '💨 Buy Wind Now — Surplus Active';
-    reason = `Strong winds (${Math.round(wind)} km/h) mean high wind output. Prices are ~₹2.50/kWh below baseline — perfect time to buy wind energy.`;
-  } else if (cloud > 70) {
-    rec = '🌿 Buy Biogas — Stable Baseload';
-    reason = `Heavy cloud cover (${cloud}%) is reducing solar availability and raising solar prices. Biogas remains stable at ₹4.30/kWh — the safest option right now.`;
-  } else {
-    rec = '⚖️ Mixed Conditions — Any Source OK';
-    reason = `Moderate conditions. Solar (${cloud}% cloud) and wind (${Math.round(wind)} km/h) are both fairly priced. Consider joining a pool for an 8% discount.`;
-  }
-  document.getElementById('adv-rec').textContent = rec;
-  document.getElementById('adv-reason').textContent = reason;
-}
 
-function refreshAdvisor() {
-  api('/api/weather').then(wx => { weatherData = wx; updateWeatherUI(wx); renderAdvisor(wx); renderForecast(wx); updateRates(wx); });
+  if (cloud < 25) {
+    rec    = '☀️ Buy Solar Now — Best Value';
+    reason = `Clear skies (${cloud}% cloud) are driving solar surplus. Prices are well below baseline. Best time to buy solar today.`;
+  } else if (wind > 25) {
+    rec    = '💨 Buy Wind Now — Surplus Active';
+    reason = `Strong winds (${Math.round(wind)} km/h) mean high wind output and low prices — perfect time to buy wind energy.`;
+  } else if (cloud > 70) {
+    rec    = '🌿 Buy Biogas — Stable Baseload';
+    reason = `Heavy cloud (${cloud}%) reducing solar availability. Biogas remains stable — safest option right now.`;
+  } else {
+    rec    = '⚖️ Mixed Conditions — Any Source OK';
+    reason = `Moderate conditions (${cloud}% cloud, ${Math.round(wind)} km/h wind). All sources fairly priced. Consider joining a pool for 8% off.`;
+  }
+  document.getElementById('adv-rec').textContent    = rec;
+  document.getElementById('adv-reason').textContent = reason;
 }
 
 // ─── FORECAST ─────────────────────────────────────
 function renderForecast(wx) {
-  const base = 3.80;
-  const cloud = wx?.clouds||30;
-  const wind = (wx?.wind_speed||2)*3.6;
-  const now = new Date();
-  const hours = Array.from({length:6},(_,i)=>i);
-  const bars = document.getElementById('forecast-bar');
+  const cloud = wx?.clouds ?? 30;
+  const now   = new Date();
+  const bars  = document.getElementById('forecast-bar');
   bars.innerHTML = '';
-  const prices = hours.map(h => {
-    const timeCloud = cloud + (Math.sin((now.getHours()+h)*0.5)*15);
-    let p = base;
-    if (timeCloud < 20) p -= 1.2; else if (timeCloud > 70) p += 2.0;
-    return Math.max(1.5, Math.min(12, p));
+  const prices = Array.from({length:6}, (_, i) => {
+    const tc = cloud + Math.sin((now.getHours() + i) * 0.5) * 15;
+    return calcRate('solar', 3.0, Math.max(0, Math.min(100, tc)), wx?.wind_speed ?? 14.4);
   });
-  const minP = Math.min(...prices);
-  const maxP = Math.max(...prices);
+  const minP = Math.min(...prices), maxP = Math.max(...prices);
   prices.forEach((p, i) => {
     const isBest = p === minP;
-    const heightPct = 30 + ((p - minP) / (maxP - minP + 0.01)) * 30;
-    const hLabel = new Date(now.getTime() + i*3600000).getHours()+'h';
+    const h = 30 + ((p - minP) / (maxP - minP + 0.01)) * 30;
+    const hLabel = new Date(now.getTime() + i * 3600000).getHours() + 'h';
     const col = document.createElement('div');
     col.className = 'fb-col';
-    col.innerHTML = `<div class="fb-price">${isBest?'★':''} ₹${p.toFixed(2)}</div>
-      <div class="fb-bar${isBest?' best':''}" style="height:${heightPct}px"></div>
+    col.innerHTML = `<div class="fb-price">${isBest ? '★' : ''} ₹${p.toFixed(2)}</div>
+      <div class="fb-bar${isBest ? ' best' : ''}" style="height:${h}px"></div>
       <div class="fb-time">${hLabel}</div>`;
     bars.appendChild(col);
   });
@@ -673,147 +650,136 @@ function renderForecast(wx) {
 
 // ─── METRICS ──────────────────────────────────────
 function updateMetrics() {
-  const totalSpent = myTxs.reduce((s,t)=>s+(t.total_cost||0),0);
-  const totalKwh = myTxs.reduce((s,t)=>s+(t.kwh||0),0);
-  const co2 = (totalKwh * 0.82).toFixed(1);
-  document.getElementById('m-spent').textContent = '₹'+Math.round(totalSpent).toLocaleString('en-IN');
-  document.getElementById('m-spent-sub').textContent = myTxs.length+' transactions';
-  document.getElementById('m-co2').textContent = co2+' kg';
-  document.getElementById('m-kwh').textContent = Math.round(totalKwh)+' kWh';
-  document.getElementById('m-kwh-sub').textContent = 'avg ₹'+(totalKwh>0?(totalSpent/totalKwh).toFixed(2):'--')+'/kWh';
-  document.getElementById('m-trades').textContent = myTxs.length;
+  const totalSpent = myTxs.reduce((s, t) => s + (t.total_cost || 0), 0);
+  const totalKwh   = myTxs.reduce((s, t) => s + (t.kwh || 0), 0);
+  const co2        = (totalKwh * 0.82).toFixed(1);
+  document.getElementById('m-spent').textContent    = '₹' + Math.round(totalSpent).toLocaleString('en-IN');
+  document.getElementById('m-spent-sub').textContent = myTxs.length + ' transactions';
+  document.getElementById('m-co2').textContent      = co2 + ' kg';
+  document.getElementById('m-kwh').textContent      = Math.round(totalKwh) + ' kWh';
+  document.getElementById('m-kwh-sub').textContent  = 'avg ₹' + (totalKwh > 0 ? (totalSpent / totalKwh).toFixed(2) : '--') + '/kWh';
+  document.getElementById('m-trades').textContent   = myTxs.length;
 }
 
 // ─── OVERVIEW TX ──────────────────────────────────
 function renderOverviewTx() {
   const container = document.getElementById('overview-tx');
-  if (!container) return;
-  
-  const recent = myTxs.slice(0,4);
+  const recent = myTxs.slice(0, 4);
   if (!recent.length) {
     container.innerHTML = '<div style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--text-faint);text-align:center;padding:20px">No purchases yet. Head to the Marketplace!</div>';
     return;
   }
-  
-  const icons = {solar:'☀️', wind:'💨', biogas:'🌿'};
+  const icons = { solar: '☀️', wind: '💨', biogas: '🌿' };
   container.innerHTML = recent.map(tx => `
-    <div class="tx-row" style="margin-bottom:8px;">
-      <div class="tx-icon ${tx.energy_type||'solar'}">${icons[tx.energy_type]||'⚡'}</div>
+    <div class="tx-row">
+      <div class="tx-icon ${tx.energy_type || 'solar'}">${icons[tx.energy_type] || '⚡'}</div>
       <div class="tx-info">
-        <div class="tx-names">${tx.from_name||'Producer'} → You</div>
-        <div class="tx-detail">${tx.kwh||0} kWh · ${new Date(tx.created_at||Date.now()).toLocaleDateString()}</div>
+        <div class="tx-producer">${tx.from_name || 'Producer'} → You</div>
+        <div class="tx-detail">${tx.kwh || 0} kWh · ${new Date(tx.created_at || Date.now()).toLocaleDateString()}</div>
       </div>
       <div class="tx-right">
-        <div class="tx-amount">₹${(tx.total_cost||0).toFixed(2)}</div>
+        <div class="tx-amount">₹${(tx.total_cost || 0).toFixed(2)}</div>
+        <div style="color:var(--green);font-size:10px;margin-top:2px">-${((tx.kwh||0)*0.82).toFixed(1)}kg CO₂</div>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
 // ─── HISTORY TX ───────────────────────────────────
 function renderHistoryTx() {
   const container = document.getElementById('history-tx');
-  if (!container) return;
-  
   if (!myTxs.length) {
     container.innerHTML = '<div style="text-align:center;padding:40px;font-family:IBM Plex Mono,monospace;color:var(--text-faint)">No purchase history yet. Start buying energy!</div>';
     return;
   }
-  
-  const icons = {solar:'☀️', wind:'💨', biogas:'🌿'};
+  const icons = { solar: '☀️', wind: '💨', biogas: '🌿' };
   container.innerHTML = myTxs.map(tx => `
-    <div class="tx-row" style="margin-bottom:8px;">
-      <div class="tx-icon ${tx.energy_type||'solar'}">${icons[tx.energy_type]||'⚡'}</div>
+    <div class="tx-row">
+      <div class="tx-icon ${tx.energy_type || 'solar'}">${icons[tx.energy_type] || '⚡'}</div>
       <div class="tx-info">
-        <div class="tx-names">${tx.from_name||'Producer'} → You</div>
-        <div class="tx-detail">${tx.kwh||0} kWh · ₹${(tx.total_cost||0).toFixed(2)} · ${new Date(tx.created_at||Date.now()).toLocaleDateString()}</div>
-        <div class="tx-hash">${tx.short_hash||'0x'+(tx.tx_hash||'').substring(0,8)||'0xNEW'}</div>
+        <div class="tx-producer">${tx.from_name || 'Producer'} → You</div>
+        <div class="tx-detail">${tx.kwh || 0} kWh · ₹${(tx.final_price||tx.total_cost||0).toFixed(2)}/kWh · ${new Date(tx.created_at || Date.now()).toLocaleDateString()}</div>
+        <div class="tx-hash">${tx.short_hash || ''}</div>
       </div>
       <div class="tx-right">
-        <div class="tx-amount">₹${(tx.total_cost||0).toFixed(2)}</div>
-        <div style="color:var(--green);font-size:11px;">-${((tx.kwh||0)*0.82).toFixed(1)}kg CO₂</div>
+        <div class="tx-amount">₹${(tx.total_cost || 0).toFixed(2)}</div>
+        <div style="color:var(--green);font-size:10px;margin-top:2px">-${((tx.kwh||0)*0.82).toFixed(1)}kg CO₂</div>
       </div>
-    </div>
-  `).join('');
+    </div>`).join('');
 }
 
-// ─── TX ROW HELPER ────────────────────────────────
-function txRowHTML(t) {
-  const icons = {solar:'☀️', wind:'💨', biogas:'🌿'};
-  const type = t.energy_type || t.type || 'solar';
-  const total = t.total_cost || ((t.kwh||0) * (t.price_per_kwh||0));
-  return `<div class="tx-row">
-    <div class="tx-icon ${type}">${icons[type]||'⚡'}</div>
-    <div class="tx-info">
-      <div class="tx-producer">${t.from_name || t.producer_name || 'Producer'}</div>
-      <div class="tx-detail">${t.kwh||0} kWh · ${type} · ${new Date(t.created_at||Date.now()).toLocaleDateString()}</div>
-    </div>
-    <div class="tx-right">
-      <div class="tx-amount">₹${(total).toFixed(2)}</div>
-      <div class="tx-hash">${(t.tx_hash||'0x000000').slice(0,12)}…</div>
-    </div>
-  </div>`;
+// ─── TRANSACTIONS ─────────────────────────────────
+async function loadMyTxs() {
+  try {
+    // /api/transactions/mine returns only current user's transactions
+    const data = await api('/api/transactions/mine');
+    const apiTxs = Array.isArray(data) ? data : [];
+
+    // Merge with localStorage (for demo mode purchases made this session)
+    const localTxs = JSON.parse(localStorage.getItem('nexus_my_txs') || '[]');
+    const all = [...apiTxs, ...localTxs];
+    const seen = new Set();
+    myTxs = all.filter(tx => {
+      const key = tx.id || `${tx.kwh}_${tx.created_at}`;
+      if (seen.has(key)) return false;
+      seen.add(key); return true;
+    }).sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+
+    localStorage.setItem('nexus_my_txs', JSON.stringify(myTxs));
+  } catch (e) {
+    myTxs = JSON.parse(localStorage.getItem('nexus_my_txs') || '[]');
+  }
+  renderOverviewTx();
+  renderHistoryTx();
+  updateMetrics();
 }
 
 // ─── MARKETPLACE ──────────────────────────────────
 function filterListings(type, el) {
   currentFilter = type;
-  document.querySelectorAll('.sf-btn').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.sf-btn').forEach(b => b.classList.remove('on'));
   el.classList.add('on');
   renderListings();
 }
 
 function renderListings() {
   const c = document.getElementById('listings-container');
-  const filtered = currentFilter === 'all' ? allListings : allListings.filter(l=>l.energy_type===currentFilter);
+  const filtered = currentFilter === 'all' ? allListings : allListings.filter(l => l.energy_type === currentFilter);
   if (!filtered.length) {
     c.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;font-family:IBM Plex Mono,monospace;font-size:11px;color:var(--text-faint)">No listings available. Check back soon.</div>';
     return;
   }
-  const cloud = weatherData?.clouds || 30;
-  const wind = (weatherData?.wind_speed||2)*3.6;
+  const dirLabel = { up: '↑ Price up', down: '↓ Price down', neutral: '◉ Stable' };
   c.innerHTML = filtered.map(l => {
-    const adj = weatherAdjust(l.energy_type, l.base_price || l.price_per_kwh || 3.5, cloud, wind);
-    return `<div class="listing-card" onclick="openBuyModal(${JSON.stringify(l).replace(/"/g,'&quot;')}, ${adj.final.toFixed(2)})">
+    // app.py returns current_price (already fully calculated) and price_direction
+    const price = l.current_price || l.base_price || 3.5;
+    const dir   = l.price_direction || 'neutral';
+    return `<div class="listing-card" onclick="openBuyModal(${JSON.stringify(l).replace(/"/g,'&quot;')})">
       <div class="lc-header">
-        <div class="lc-name">${l.producer_name || l.name || 'Energy Producer'}</div>
-        <div class="lc-type ${l.energy_type}">${l.energy_type||'solar'}</div>
+        <div class="lc-name">${l.producer_name || 'Energy Producer'}</div>
+        <div class="lc-type ${l.energy_type}">${l.energy_type || 'solar'}</div>
       </div>
       <div class="lc-price-row">
-        <div class="lc-price">₹${adj.final.toFixed(2)}</div>
+        <div class="lc-price">₹${price.toFixed(2)}</div>
         <div class="lc-unit">/ kWh</div>
       </div>
+      <div class="lc-dir ${dir}">${dirLabel[dir] || '◉ Stable'}</div>
       <div class="lc-meta">
-        <div class="lc-meta-item">⚡ Avail: <span>${l.available_kwh||0} kWh</span></div>
-        <div class="lc-meta-item">📍 Dist: <span>${l.distance_km ? l.distance_km.toFixed(1)+'km' : '--'}</span></div>
-        <div class="lc-meta-item">🌱 CO₂: <span>-${((l.available_kwh||1)*0.82).toFixed(0)} kg</span></div>
-        <div class="lc-meta-item">⭐ <span>${l.rating ? l.rating.toFixed(1)+'/5' : 'New'}</span></div>
+        <div class="lc-meta-item">⚡ Avail: <span>${l.available_kwh || 0} kWh</span></div>
+        <div class="lc-meta-item">📍 Dist: <span>${l.distance_km ? l.distance_km.toFixed(1) + 'km' : '--'}</span></div>
+        <div class="lc-meta-item">🌱 CO₂: <span>-${((l.available_kwh||0)*0.82).toFixed(0)}kg</span></div>
+        <div class="lc-meta-item">💡 Base: <span>₹${l.base_price}</span></div>
       </div>
-      <button class="lc-buy-btn" onclick="event.stopPropagation();openBuyModal(${JSON.stringify(l).replace(/"/g,'&quot;')}, ${adj.final.toFixed(2)})">⚡ Buy Now</button>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--text-faint);margin-bottom:10px;line-height:1.4">${l.price_reason ? l.price_reason.slice(0,80) : ''}</div>
+      <button class="lc-buy-btn" onclick="event.stopPropagation();openBuyModal(${JSON.stringify(l).replace(/"/g,'&quot;')})">⚡ Buy Now</button>
     </div>`;
   }).join('');
 }
 
-function weatherAdjust(type, base, cloud, wind) {
-  const subsidies = {solar:-0.50, wind:-0.30, biogas:-0.20};
-  let adj = 0;
-  if (type === 'solar') {
-    if (cloud < 20) adj = -1.50; else if (cloud > 70) adj = 2.50;
-  } else if (type === 'wind') {
-    if (wind > 25) adj = -2.50; else if (wind < 5) adj = 2.20;
-  }
-  const final = Math.max(1.5, Math.min(12, base + adj + (subsidies[type]||0)));
-  return {base, adj, subsidy: subsidies[type]||0, final};
-}
-
 // ─── BUY MODAL ────────────────────────────────────
-let activeListing = null, activeBasePrice = 0;
-
-function openBuyModal(listing, adjPrice) {
+// app.py listing fields: producer_name, base_price, current_price, pricing{}, energy_type
+function openBuyModal(listing) {
   activeListing = listing;
-  activeBasePrice = adjPrice;
-  document.getElementById('buy-from').textContent = listing.name || 'this producer';
-  document.getElementById('buy-sub').innerHTML = `from <span style="color:var(--A)">${listing.name||'Producer'}</span> · ${listing.energy_type} energy`;
+  document.getElementById('buy-from').textContent = listing.producer_name || 'Producer';
   document.getElementById('buy-kwh').value = '10';
   updateBuyPrice();
   document.getElementById('buy-modal').classList.add('open');
@@ -823,96 +789,92 @@ function closeBuyModal() { document.getElementById('buy-modal').classList.remove
 
 function updateBuyPrice() {
   if (!activeListing) return;
-  const kwh = parseFloat(document.getElementById('buy-kwh').value)||1;
-  const cloud = weatherData?.clouds||30;
-  const wind = (weatherData?.wind_speed||2)*3.6;
-  const adj = weatherAdjust(activeListing.energy_type, activeListing.price_per_kwh||3.5, cloud, wind);
-  let discount = 0;
-  if (kwh >= 50) discount = 0.08;
-  const total = adj.final * kwh * (1 - discount);
-  const co2 = (kwh * 0.82).toFixed(1);
-  document.getElementById('bp-base').textContent = '₹'+adj.base.toFixed(2)+'/kWh';
-  document.getElementById('bp-weather').textContent = (adj.adj >= 0 ? '+' : '') + '₹'+adj.adj.toFixed(2);
-  document.getElementById('bp-subsidy').textContent = '₹'+adj.subsidy.toFixed(2);
-  document.getElementById('bp-bulk').textContent = discount > 0 ? '-8%' : '—';
-  document.getElementById('bp-bulk-lbl').textContent = 'Bulk Discount '+(kwh>=50?'✓':'(need ≥50 kWh)');
-  document.getElementById('bp-co2').textContent = '-'+co2+' kg CO₂';
-  document.getElementById('bp-total').textContent = '₹'+total.toFixed(2);
+  const kwh = parseFloat(document.getElementById('buy-kwh').value) || 1;
+
+  // Use pre-computed pricing from app.py if available, else calculate locally
+  const pricing = activeListing.pricing || {};
+  const basePrice   = activeListing.base_price || 3.0;
+  const weatherMod  = pricing.weather_modifier ?? 0;
+  const subsidy     = pricing.subsidy_applied ?? 0;
+  const txFee       = pricing.transmission_fee ?? 0;
+  const platformFee = pricing.platform_fee ?? 0;
+  let   unitPrice   = activeListing.current_price || basePrice;
+
+  // Bulk discount (≥50 kWh)
+  const bulkDisc = kwh >= 50 ? unitPrice * 0.08 : 0;
+  const finalUnit = Math.max(1.5, unitPrice - bulkDisc);
+  const total = finalUnit * kwh;
+  const co2   = (kwh * 0.82).toFixed(1);
+
+  document.getElementById('bp-base').textContent      = '₹' + basePrice.toFixed(2) + '/kWh';
+  document.getElementById('bp-weather').textContent   = (weatherMod >= 0 ? '+' : '') + '₹' + weatherMod.toFixed(2);
+  document.getElementById('bp-subsidy').textContent   = '-₹' + subsidy.toFixed(2);
+  document.getElementById('bp-bulk').textContent      = bulkDisc > 0 ? '-8% (₹' + bulkDisc.toFixed(2) + ')' : '—';
+  document.getElementById('bp-bulk-lbl').textContent  = 'Bulk Discount ' + (kwh >= 50 ? '✓' : '(need ≥50 kWh)');
+  document.getElementById('bp-platform').textContent  = '₹' + platformFee.toFixed(2);
+  document.getElementById('bp-co2').textContent       = '-' + co2 + ' kg CO₂';
+  document.getElementById('bp-total').textContent     = '₹' + total.toFixed(2);
 }
 
 async function confirmPurchase() {
   if (!activeListing) return;
-  const kwh = parseFloat(document.getElementById('buy-kwh').value)||1;
-  const cloud = weatherData?.clouds||30;
-  const wind = (weatherData?.wind_speed||2)*3.6;
-  const adj = weatherAdjust(activeListing.energy_type, activeListing.price_per_kwh||3.5, cloud, wind);
-  const discount = kwh >= 50 ? 0.08 : 0;
-  const total = adj.final * kwh * (1 - discount);
+  const kwh       = parseFloat(document.getElementById('buy-kwh').value) || 1;
+  const unitPrice = activeListing.current_price || activeListing.base_price || 3.0;
+  const bulkDisc  = kwh >= 50 ? unitPrice * 0.08 : 0;
+  const total     = (unitPrice - bulkDisc) * kwh;
 
   const btn = document.querySelector('#buy-modal .btn-confirm');
-  btn.textContent = 'PROCESSING...';
-  btn.disabled = true;
+  btn.textContent = 'PROCESSING...'; btn.disabled = true;
 
   try {
-    // Create Razorpay order
     const order = await api('/api/payment/create-order', {
-      method:'POST', 
-      body: JSON.stringify({amount: Math.round(total*100), currency:'INR'})
+      method: 'POST',
+      body: JSON.stringify({ amount: Math.round(total * 100), currency: 'INR' })
     });
 
-    // Demo mode — no Razorpay keys configured
     if (order.demo || (order.order_id && order.order_id.startsWith('demo_order_'))) {
+      // Demo mode
       const tradeRes = await api('/api/trade', {
-        method:'POST', 
+        method: 'POST',
         body: JSON.stringify({
           listing_id: activeListing.id,
-          kwh: kwh,
+          kwh,
           payment_id: order.order_id || 'demo',
           energy_type: activeListing.energy_type,
-          consumer_lat: user.location_lat || 22.7196,
-          consumer_lon: user.location_lon || 75.8577
+          consumer_lat: user?.location_lat || 22.7196,
+          consumer_lon: user?.location_lon || 75.8577
         })
       });
-      
       if (tradeRes.success) {
-        // Add to local transactions array
         const newTx = tradeRes.transaction || {
-          kwh: kwh,
-          total_cost: total,
-          energy_type: activeListing.energy_type,
+          kwh, total_cost: total, energy_type: activeListing.energy_type,
           from_name: activeListing.producer_name || 'Producer',
-          to_name: user.name || 'Consumer',
           created_at: new Date().toISOString(),
-          short_hash: '0x' + Math.random().toString(16).substring(2,10).toUpperCase()
+          short_hash: '0x' + Math.random().toString(16).substring(2, 10).toUpperCase()
         };
-        
         myTxs.unshift(newTx);
-        
-        // Save to localStorage for persistence
         localStorage.setItem('nexus_my_txs', JSON.stringify(myTxs));
-        
-        // Update UI
-        updateMetrics();
-        renderOverviewTx();
-        renderHistoryTx();
-        
+        updateMetrics(); renderOverviewTx(); renderHistoryTx();
         closeBuyModal();
-        toast(`⚡ Purchased ${kwh} kWh for ₹${total.toFixed(2)}! (Demo Mode)`);
+        toast(`⚡ Purchased ${kwh} kWh for ₹${total.toFixed(2)}!`);
+        // Refresh listings so available_kwh updates
+        api(`/api/listings?lat=${user?.location_lat||22.7196}&lon=${user?.location_lon||75.8577}`)
+          .then(d => { allListings = Array.isArray(d) ? d : (d.listings || []); });
       } else {
         toast('Trade failed: ' + (tradeRes.error || 'Unknown error'), false);
       }
     } else {
-      // Razorpay live checkout (keep existing code)
+      // Razorpay live
       const options = {
-        key: order.key || order.razorpay_key || '',
-        amount: order.amount, 
+        key: order.key || '',
+        amount: order.amount,
         currency: order.currency || 'INR',
         order_id: order.order_id || order.id,
-        name: 'NEXUS Energy', 
-        description: `${kwh} kWh from ${activeListing.producer_name||'Producer'}`,
+        name: 'NEXUS Energy',
+        description: `${kwh} kWh from ${activeListing.producer_name || 'Producer'}`,
         handler: async function(response) {
           const verify = await api('/api/payment/verify', {
-            method:'POST', 
+            method: 'POST',
             body: JSON.stringify({
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
@@ -920,73 +882,63 @@ async function confirmPurchase() {
             })
           });
           if (verify.verified) {
-            const tradeRes = await api('/api/trade', {
-              method:'POST', 
+            const tr = await api('/api/trade', {
+              method: 'POST',
               body: JSON.stringify({
-                listing_id: activeListing.id, 
-                kwh,
+                listing_id: activeListing.id, kwh,
                 payment_id: verify.payment_id,
                 energy_type: activeListing.energy_type,
-                consumer_lat: user.location_lat || 22.7196,
-                consumer_lon: user.location_lon || 75.8577
+                consumer_lat: user?.location_lat || 22.7196,
+                consumer_lon: user?.location_lon || 75.8577
               })
             });
-            if (tradeRes.success) {
-              const newTx = tradeRes.transaction || {
-                kwh: kwh,
-                total_cost: total,
-                energy_type: activeListing.energy_type,
-                from_name: activeListing.producer_name || 'Producer',
-                to_name: user.name || 'Consumer',
-                created_at: new Date().toISOString()
-              };
-              myTxs.unshift(newTx);
+            if (tr.success) {
+              myTxs.unshift(tr.transaction || { kwh, total_cost: total, energy_type: activeListing.energy_type, from_name: activeListing.producer_name, created_at: new Date().toISOString() });
               localStorage.setItem('nexus_my_txs', JSON.stringify(myTxs));
-              updateMetrics(); 
-              renderOverviewTx();
-              renderHistoryTx();
-              closeBuyModal(); 
-              toast(`⚡ Purchased ${kwh} kWh for ₹${total.toFixed(2)}!`);
+              updateMetrics(); renderOverviewTx(); renderHistoryTx();
+              closeBuyModal(); toast(`⚡ Purchased ${kwh} kWh for ₹${total.toFixed(2)}!`);
             }
           }
         },
-        theme: {color: '#00CED4'}
+        theme: { color: '#00CED4' }
       };
       if (window.Razorpay) new window.Razorpay(options).open();
-      else { toast('Payment gateway unavailable', false); }
+      else toast('Payment gateway unavailable', false);
     }
-  } catch (error) {
-    console.error('Purchase error:', error);
-    toast('Purchase failed: ' + error.message, false);
+  } catch (err) {
+    toast('Purchase failed: ' + err.message, false);
   } finally {
-    btn.textContent = 'Confirm & Pay';
-    btn.disabled = false;
+    btn.textContent = '⚡ Confirm & Pay'; btn.disabled = false;
   }
 }
 
 // ─── POOLS ────────────────────────────────────────
+// app.py pool fields: id, producer_name, energy_type, target_kwh, total_committed, discount_unlocked, price_per_unit
 async function loadPools() {
-  const data = await api('/api/pools');
-  const pools = data.pools || data || [];
+  const data  = await api('/api/pools');
+  const pools = Array.isArray(data) ? data : (data.pools || []);
   const c = document.getElementById('pools-list');
   if (!pools.length) {
-    c.innerHTML = '<div style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--text-faint);text-align:center;padding:20px">No active pools. Create one to get started!</div>';
+    c.innerHTML = '<div style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--text-faint);text-align:center;padding:20px">No active pools. Create one!</div>';
     return;
   }
   c.innerHTML = pools.map(p => {
-    const pct = Math.min(100, Math.round(((p.current_kwh||0)/(p.target_kwh||100))*100));
-    const filled = (p.current_kwh||0) >= (p.target_kwh||100);
+    const committed = p.total_committed || 0;
+    const target    = p.target_kwh || 100;
+    const pct       = Math.min(100, Math.round((committed / target) * 100));
+    const filled    = p.discount_unlocked || committed >= target;
+    const memberCount = (p.pool_members || p.members || []).length;
     return `<div class="pool-card">
       <div class="pool-header">
-        <div class="pool-name">${p.name||'Energy Pool'}</div>
-        <div class="pool-disc">${filled?'8% ACTIVE':'8% WHEN FULL'}</div>
+        <div class="pool-name">${p.name || p.producer_name + '\'s Pool'} (${p.energy_type || 'solar'})</div>
+        <div class="pool-disc">${filled ? '8% ACTIVE' : '8% WHEN FULL'}</div>
       </div>
       <div class="pool-progress-bg"><div class="pool-progress-fill" style="width:${pct}%"></div></div>
       <div class="pool-meta">
-        <span>${p.current_kwh||0} / ${p.target_kwh||100} kWh (${pct}%)</span>
-        <span>${p.member_count||0} members · ${p.energy_type||'solar'}</span>
+        <span>${committed.toFixed(0)} / ${target} kWh (${pct}%)</span>
+        <span>${memberCount} member${memberCount !== 1 ? 's' : ''} · ₹${(p.price_per_unit||3).toFixed(2)}/kWh${filled?' → ₹'+(p.discounted_price||((p.price_per_unit||3)*0.92)).toFixed(2):''}</span>
       </div>
-      <button class="pool-join-btn" ${filled?'disabled':''} onclick="joinPool('${p.id}')">
+      <button class="pool-join-btn" ${filled ? 'disabled' : ''} onclick="joinPool('${p.id}')">
         ${filled ? '✓ Pool Filled — Discount Active' : '+ Join Pool'}
       </button>
     </div>`;
@@ -994,133 +946,90 @@ async function loadPools() {
 }
 
 async function joinPool(poolId) {
-  const kwh = prompt('How many kWh do you want to contribute to this pool?');
+  const kwh = prompt('How many kWh do you want to contribute?');
   if (!kwh || isNaN(kwh)) return;
-  const res = await api(`/api/pools/${poolId}/join`, {method:'POST', body: JSON.stringify({kwh: parseFloat(kwh)})});
-  if (res.success || res.pool) { toast('🤝 Joined pool! Discount unlocks at 50 kWh.'); loadPools(); }
-  else toast('Could not join pool.', false);
+  const res = await api(`/api/pools/${poolId}/join`, { method: 'POST', body: JSON.stringify({ kwh: parseFloat(kwh) }) });
+  if (res.success) { toast(`🤝 Joined! Pool at ${res.total_committed?.toFixed(0)} kWh. ${res.discount_unlocked ? '🎉 8% discount unlocked!' : ''}`); loadPools(); }
+  else toast('Could not join pool: ' + (res.error || 'Unknown error'), false);
 }
 
 function showCreatePool() { document.getElementById('pool-modal').classList.add('open'); }
-function closePoolModal() { document.getElementById('pool-modal').classList.remove('open'); }
+function closePoolModal()  { document.getElementById('pool-modal').classList.remove('open'); }
 
 async function submitCreatePool() {
-  const name = document.getElementById('pool-name-inp').value.trim();
-  const target_kwh = parseFloat(document.getElementById('pool-kwh-inp').value)||100;
+  const name        = document.getElementById('pool-name-inp').value.trim();
+  const target_kwh  = parseFloat(document.getElementById('pool-kwh-inp').value) || 100;
   const energy_type = document.getElementById('pool-type-inp').value;
   if (!name) { toast('Please enter a pool name.', false); return; }
-  const res = await api('/api/pools', {method:'POST', body: JSON.stringify({name, target_kwh, energy_type})});
-  if (res.success || res.pool) { toast('🤝 Pool created!'); closePoolModal(); loadPools(); }
-  else toast('Could not create pool.', false);
-}
-
-// ─── HISTORY ──────────────────────────────────────
-async function loadMyTxs() {
-  try {
-    // Try to get from API first
-    const data = await api('/api/transactions?limit=100');
-    const apiTxs = data.transactions || data || [];
-    
-    // Filter to only show current user's transactions
-    const userTxs = apiTxs.filter(t => 
-      (t.consumer_id && t.consumer_id === user?.id) || 
-      (t.to_name && t.to_name === user?.name) ||
-      (t.consumer_name && t.consumer_name === user?.name)
-    );
-    
-    // Also load from localStorage for demo mode
-    const localTxs = JSON.parse(localStorage.getItem('nexus_my_txs') || '[]');
-    
-    // Merge and deduplicate by ID or created_at
-    const allTxs = [...userTxs, ...localTxs];
-    const uniqueTxs = [];
-    const seen = new Set();
-    
-    allTxs.forEach(tx => {
-      const key = tx.id || `${tx.kwh}_${tx.created_at}`;
-      if (!seen.has(key)) {
-        seen.add(key);
-        uniqueTxs.push(tx);
-      }
-    });
-    
-    // Sort by date (newest first)
-    myTxs = uniqueTxs.sort((a, b) => 
-      new Date(b.created_at || Date.now()) - new Date(a.created_at || Date.now())
-    );
-    
-    // Save merged transactions back to localStorage
-    localStorage.setItem('nexus_my_txs', JSON.stringify(myTxs));
-    
-  } catch (e) { 
-    console.error('Error loading transactions:', e);
-    // Fallback to localStorage only
-    myTxs = JSON.parse(localStorage.getItem('nexus_my_txs') || '[]');
-  }
-  
-  // Update all displays
-  renderOverviewTx();
-  renderHistoryTx();
-  updateMetrics();
+  const res = await api('/api/pools', { method: 'POST', body: JSON.stringify({ name, target_kwh, energy_type, price_per_unit: 3.0 }) });
+  if (res.id || res.success) { toast('🤝 Pool created!'); closePoolModal(); loadPools(); }
+  else toast('Could not create pool: ' + (res.error || ''), false);
 }
 
 // ─── CARBON ───────────────────────────────────────
+// app.py /api/carbon returns: co2_kg, rank, green_credits, badges[]
 function renderCarbonSection(carbonData) {
-  const co2 = carbonData?.co2_kg || myTxs.reduce((s,t)=>s+(t.kwh||0),0)*0.82;
-  const rank = co2 < 10 ? 'GREEN' : co2 < 50 ? 'SILVER' : co2 < 100 ? 'GOLD' : 'PLATINUM';
-  const pct = Math.min(100, (co2/200)*100);
+  const co2  = carbonData?.co2_kg ?? myTxs.reduce((s, t) => s + (t.kwh || 0), 0) * 0.82;
+  const rank = carbonData?.rank || (co2 < 10 ? 'GREEN' : co2 < 50 ? 'SILVER' : co2 < 100 ? 'GOLD' : 'PLATINUM');
+  const pct  = Math.min(100, (co2 / 200) * 100);
 
-  document.getElementById('cr-val').textContent = co2.toFixed(1);
-  document.getElementById('ci-rank').textContent = `🌱 ${rank} TIER`;
+  document.getElementById('cr-val').textContent    = co2.toFixed(1);
+  document.getElementById('ci-rank').textContent   = `🌱 ${rank} TIER`;
+  document.getElementById('carbon-ring-fill').setAttribute('stroke-dashoffset', (314 - (314 * pct / 100)).toFixed(1));
 
-  const dashOffset = 314 - (314 * pct / 100);
-  document.getElementById('carbon-ring-fill').setAttribute('stroke-dashoffset', dashOffset);
+  const titles = { GREEN: 'Carbon Newcomer', SILVER: 'Green Contributor', GOLD: 'Climate Advocate', PLATINUM: 'Platinum Guardian' };
+  document.getElementById('ci-title').textContent  = titles[rank] || 'Carbon Newcomer';
+  document.getElementById('ci-desc').textContent   = rank === 'PLATINUM'
+    ? `🏆 Elite status! You've saved ${co2.toFixed(1)} kg CO₂ — equivalent to planting ${(co2/22).toFixed(0)} trees.`
+    : `Every kWh of renewable energy saves 0.82 kg CO₂. You've saved ${co2.toFixed(1)} kg — keep going!`;
 
-  const allBadges = [
-    {icon:'⚡', name:'First Trade', threshold:0, earned: myTxs.length >= 1},
-    {icon:'🌱', name:'Green Starter', threshold:10, earned: co2 >= 10},
-    {icon:'🏆', name:'Carbon Hero', threshold:50, earned: co2 >= 50},
-    {icon:'🌍', name:'Climate Champion', threshold:100, earned: co2 >= 100},
-    {icon:'💎', name:'Platinum Guardian', threshold:200, earned: co2 >= 200},
+  // Badges from API or local
+  const badges = carbonData?.badges || [
+    { icon: '⚡', name: 'First Trade',        unlocked: myTxs.length >= 1, threshold: 0 },
+    { icon: '🌱', name: 'Green Starter',       unlocked: co2 >= 10,        threshold: 10 },
+    { icon: '🏆', name: 'Carbon Hero',         unlocked: co2 >= 50,        threshold: 50 },
+    { icon: '🌍', name: 'Climate Champion',    unlocked: co2 >= 100,       threshold: 100 },
+    { icon: '💎', name: 'Platinum Guardian',   unlocked: co2 >= 200,       threshold: 200 },
   ];
-  document.getElementById('badges-row').innerHTML = allBadges.map(b =>
-    `<div class="badge ${b.earned?'earned':''}">
+  document.getElementById('badges-row').innerHTML = badges.map(b =>
+    `<div class="badge ${b.unlocked ? 'earned' : ''}">
       <div class="badge-icon">${b.icon}</div>
       <div>
         <div style="font-size:10px;font-family:'Mulish',sans-serif;font-weight:600">${b.name}</div>
-        <div style="font-size:8px">${b.earned ? 'Earned ✓' : '≥'+b.threshold+' kg CO₂'}</div>
+        <div style="font-size:8px">${b.unlocked ? 'Earned ✓' : '≥' + b.threshold + ' kg CO₂'}</div>
       </div>
-    </div>`
-  ).join('');
+    </div>`).join('');
 }
 
 // ─── MAP ──────────────────────────────────────────
 function initConsumerMap() {
   if (mapConsumer) return;
-  const lat = user?.location_lat || user?.lat || 22.7196;
-  const lon = user?.location_lon || user?.lon || 75.8577;
-  mapConsumer = L.map('consumer-map', {center:[lat,lon], zoom:10, attributionControl:false});
+  const lat = user?.location_lat || 22.7196;
+  const lon = user?.location_lon || 75.8577;
+  mapConsumer = L.map('consumer-map', { center: [lat, lon], zoom: 10, attributionControl: false });
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mapConsumer);
+
+  const colors = { solar: '#F5A623', wind: '#00CED4', biogas: '#10B981' };
+  const icons  = { solar: '☀️', wind: '💨', biogas: '🌿' };
+
   allListings.forEach(l => {
-    const markerLat = l.location_lat || l.lat;
-    const markerLon = l.location_lon || l.lon;
-    if (!markerLat || !markerLon) return;
-    const icons = {solar:'☀️', wind:'💨', biogas:'🌿'};
-    const colors = {solar:'#F5A623', wind:'#00CED4', biogas:'#10B981'};
+    const mlat = l.location_lat, mlon = l.location_lon;
+    if (!mlat || !mlon) return;
+    const c    = colors[l.energy_type] || '#00CED4';
     const icon = L.divIcon({
-      html: `<div style="width:32px;height:32px;background:${colors[l.energy_type]||'#00CED4'};border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;border:2px solid rgba(255,255,255,0.3);cursor:pointer">${icons[l.energy_type]||'⚡'}</div>`,
-      iconSize:[32,32], iconAnchor:[16,16], className:''
+      html: `<div style="width:32px;height:32px;background:${c};border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;border:2px solid rgba(255,255,255,0.3)">${icons[l.energy_type] || '⚡'}</div>`,
+      iconSize: [32, 32], iconAnchor: [16, 16], className: ''
     });
-    const cloud = weatherData?.clouds||30;
-    const wind = (weatherData?.wind_speed||2)*3.6;
-    const adj = weatherAdjust(l.energy_type, l.base_price || l.price_per_kwh || 3.5, cloud, wind);
-    L.marker([markerLat,markerLon],{icon})
-      .addTo(mapConsumer)
-      .bindPopup(`<b>${l.producer_name || l.name || 'Producer'}</b><br/>₹${adj.final.toFixed(2)}/kWh · ${l.available_kwh||0} kWh<br/><button onclick="openBuyModal(${JSON.stringify(l).replace(/"/g,'&quot;')}, ${adj.final})" style="margin-top:6px;padding:4px 10px;background:#00CED4;border:none;border-radius:4px;cursor:pointer;font-weight:bold">Buy</button>`);
+    const price = l.current_price || l.base_price || 3.5;
+    L.marker([mlat, mlon], { icon }).addTo(mapConsumer)
+      .bindPopup(`<b>${l.producer_name || 'Producer'}</b><br/>₹${price.toFixed(2)}/kWh · ${l.available_kwh || 0} kWh<br/><button onclick="openBuyModal(${JSON.stringify(l).replace(/"/g,'&quot;')})" style="margin-top:6px;padding:4px 10px;background:#00CED4;border:none;border-radius:4px;cursor:pointer;font-weight:bold">Buy</button>`);
   });
+
+  L.circleMarker([lat, lon], { radius: 8, fillColor: '#8B5CF6', fillOpacity: 0.9, color: '#fff', weight: 2 })
+    .addTo(mapConsumer).bindPopup('📍 Your Location');
 }
 
-// ─── ARIA ─────────────────────────────────────────
+// ─── ARIA CHAT ────────────────────────────────────
 let ariaHistory = [];
 
 function ariaPrompt(msg) {
@@ -1130,74 +1039,121 @@ function ariaPrompt(msg) {
 
 async function sendAria() {
   const input = document.getElementById('aria-input');
-  const msg = input.value.trim();
+  const msg   = input.value.trim();
   if (!msg) return;
   input.value = '';
   addAriaMsg(msg, 'user');
-  addAriaMsg('Thinking…', 'ai thinking', 'aria-thinking');
-  ariaHistory.push({role:'user', content:msg});
-  const res = await api('/api/ai-advisor', {method:'POST', body: JSON.stringify({message:msg, role:'consumer', history:ariaHistory})});
-  document.getElementById('aria-thinking')?.remove();
-  const reply = res.reply || res.message || 'ARIA is currently unavailable. Try again shortly.';
-  addAriaMsg(reply, 'ai');
-  ariaHistory.push({role:'assistant', content:reply});
+  const thinkingId = 'aria-thinking-' + Date.now();
+  addAriaMsg('⏳ Thinking…', 'ai thinking', thinkingId);
+  ariaHistory.push({ role: 'user', content: msg });
+
+  // Always read fresh from localStorage
+  const tok = getToken();
+  const usr = getUser();
+
+  console.group('🤖 ARIA Request');
+  console.log('token:', tok ? tok.slice(0, 16) + '...' : '❌ EMPTY');
+  console.log('message:', msg);
+  console.groupEnd();
+
+  if (!tok) {
+    document.getElementById(thinkingId)?.remove();
+    addAriaMsg('⚠️ No auth token. Please sign out and sign in again.', 'ai');
+    return;
+  }
+
+  try {
+    const res = await fetch('/api/ai-advisor', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + tok },
+      body: JSON.stringify({
+        message: msg,
+        role: usr?.role || 'consumer',
+        lat: usr?.location_lat || 22.7196,
+        lon: usr?.location_lon || 75.8577
+      })
+    });
+    const rawText = await res.text();
+    console.group('🤖 ARIA Response');
+    console.log('HTTP status:', res.status);
+    console.log('Raw body:', rawText);
+    console.groupEnd();
+
+    document.getElementById(thinkingId)?.remove();
+    let data = {};
+    try { data = JSON.parse(rawText); } catch(e) {
+      addAriaMsg('⚠️ Server error: ' + rawText.slice(0, 100), 'ai'); return;
+    }
+    if (res.status === 401) {
+      addAriaMsg(`🔒 Auth failed: ${data.error || 'Token rejected'}. Try signing out and back in.`, 'ai'); return;
+    }
+    const reply  = data.reply || data.message || (data.error ? '⚠️ ' + data.error : '⚠️ No reply from server.');
+    const engine = data.powered_by || '';
+    const suffix = engine === 'rule-engine' ? '\n\n_(Rule-based — Groq not active)_' : '';
+    addAriaMsg(reply + suffix, 'ai');
+    ariaHistory.push({ role: 'assistant', content: reply });
+  } catch (err) {
+    document.getElementById(thinkingId)?.remove();
+    addAriaMsg('⚠️ Network error: ' + err.message, 'ai');
+  }
 }
 
-function addAriaMsg(text, cls, id='') {
+function addAriaMsg(text, cls, id = '') {
   const box = document.getElementById('aria-msgs');
   const div = document.createElement('div');
-  div.className = 'aria-msg '+cls;
+  div.className = 'aria-msg ' + cls;
   if (id) div.id = id;
-  div.textContent = text;
+  div.innerHTML = text.replace(/\n/g, '<br/>').replace(/_(.*?)_/g, '<em>$1</em>');
   box.appendChild(div);
   box.scrollTop = box.scrollHeight;
 }
 
 // ─── LOGOUT ───────────────────────────────────────
-function showLogoutModal() { document.getElementById('logout-modal').classList.add('open'); }
+function showLogoutModal()  { document.getElementById('logout-modal').classList.add('open'); }
 function closeLogoutModal() { document.getElementById('logout-modal').classList.remove('open'); }
 function confirmLogout() {
-  fetch('/api/auth/logout',{method:'POST',headers:{'Authorization':'Bearer '+token}}).finally(()=>{
-    localStorage.removeItem('nx_user'); localStorage.removeItem('nx_token');
-    localStorage.removeItem('nexus_my_txs');
-    window.location.href = '/';
-  });
+  fetch('/api/auth/logout', { method: 'POST', headers: { 'Authorization': 'Bearer ' + getToken() } })
+    .finally(() => {
+      localStorage.removeItem('nx_user'); localStorage.removeItem('nx_token');
+      localStorage.removeItem('nexus_my_txs');
+      window.location.href = '/';
+    });
 }
 
 // ─── NAV ──────────────────────────────────────────
 const headings = {
-  overview:'Consumer <span>Overview</span>',
-  market:'Energy <span>Marketplace</span>',
-  pools:'Community <span>Pools</span>',
-  map:'Grid <span>Map</span>',
-  history:'Purchase <span>History</span>',
-  carbon:'Carbon <span>Impact</span>',
-  aria:'ARIA <span>Advisor</span>'
+  overview: 'Consumer <span>Overview</span>',
+  market:   'Energy <span>Marketplace</span>',
+  pools:    'Community <span>Pools</span>',
+  map:      'Grid <span>Map</span>',
+  history:  'Purchase <span>History</span>',
+  carbon:   'Carbon <span>Impact</span>',
+  aria:     'ARIA <span>Advisor</span>'
 };
 function goTo(sec, el) {
-  document.querySelectorAll('.page-sec').forEach(s=>s.classList.remove('on'));
-  document.getElementById('s-'+sec)?.classList.add('on');
-  document.querySelectorAll('.nav').forEach(n=>n.classList.remove('on'));
+  document.querySelectorAll('.page-sec').forEach(s => s.classList.remove('on'));
+  document.getElementById('s-' + sec)?.classList.add('on');
+  document.querySelectorAll('.nav').forEach(n => n.classList.remove('on'));
   if (el) el.classList.add('on');
-  document.getElementById('page-h').innerHTML = headings[sec]||sec;
-  if (sec === 'market') renderListings();
-  if (sec === 'pools') loadPools();
+  document.getElementById('page-h').innerHTML = headings[sec] || sec;
+  if (sec === 'market')  renderListings();
+  if (sec === 'pools')   loadPools();
   if (sec === 'history') renderHistoryTx();
-  if (sec === 'carbon') { api('/api/carbon').then(c=>renderCarbonSection(c)); }
-  if (sec === 'map') { setTimeout(()=>initConsumerMap(), 100); }
+  if (sec === 'carbon')  api('/api/carbon').then(c => renderCarbonSection(c));
+  if (sec === 'map')     setTimeout(() => initConsumerMap(), 100);
 }
 
 // ─── TOAST ────────────────────────────────────────
-function toast(msg, ok=true) {
+function toast(msg, ok = true) {
   const el = document.getElementById('toast');
   el.style.borderColor = ok ? 'var(--A)' : 'var(--rose)';
   el.style.color = ok ? 'var(--A)' : 'var(--rose)';
   el.textContent = msg; el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'), 4000);
+  setTimeout(() => el.classList.remove('show'), 4000);
 }
 
 const style = document.createElement('style');
-style.textContent = `@keyframes ripple{0%{transform:scale(1);opacity:0.5}100%{transform:scale(2);opacity:0}} .leaflet-tile{filter:brightness(0.22) saturate(0.35) hue-rotate(200deg)!important;}`;
+style.textContent = `.leaflet-tile{filter:brightness(0.22) saturate(0.35) hue-rotate(200deg)!important;}`;
 document.head.appendChild(style);
 </script>
 </body>

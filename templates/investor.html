@@ -302,12 +302,19 @@
       <div class="form-label">INVESTMENT AMOUNT (₹)</div>
       <input class="form-input" id="inv-amount" type="number" min="1000" step="500" value="5000"/>
     </div>
+    <div style="padding:10px;background:var(--A-d);border:1px solid var(--border-a);border-radius:8px;margin-bottom:12px;font-size:12px;display:flex;justify-content:space-between;">
+      <span>Rate per kWh:</span>
+      <span id="inv-rate" style="color:var(--A);font-weight:bold;">₹5.00</span>
+    </div>
     <div style="padding:12px;background:var(--bg);border:1px solid var(--border-a);border-radius:10px;margin-bottom:16px">
       <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-faint);margin-bottom:6px">
         <span>Expected ROI</span><span id="inv-roi-preview" style="color:var(--green)">--%</span>
       </div>
       <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-faint)">
         <span>Lock Period</span><span id="inv-lock">6 months</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--text-faint);margin-top:6px;padding-top:6px;border-top:1px solid var(--border);">
+        <span>kWh Funded</span><span id="inv-kwh-preview" style="color:var(--cyan);font-weight:bold;">0 kWh</span>
       </div>
     </div>
     <div class="modal-btns">
@@ -339,33 +346,72 @@ if (!user || !['investor','demo'].includes(user.role)) window.location.href = '/
 document.getElementById('s-uname').textContent = user?.name || 'Investor';
 document.getElementById('s-avatar').textContent = user?.name?.[0]?.toUpperCase() || '📈';
 
-const api = (url, opt={}) => fetch(url, {
-  ...opt, headers:{'Content-Type':'application/json','Authorization':'Bearer '+token,...(opt.headers||{})}
-}).then(r=>r.json()).catch(()=>({}));
+const api = (url, opt={}) => {
+  console.log('API call to:', url);
+  console.log('Using token:', token ? token.substring(0, 20) + '...' : 'No token');
+  return fetch(url, {
+    ...opt, 
+    headers:{
+      'Content-Type':'application/json',
+      'Authorization':'Bearer '+token,
+      ...(opt.headers||{})
+    }
+  }).then(r => r.json()).catch((err) => {
+    console.error('API error:', err);
+    return {};
+  });
+};
 
 let myInvestments = [];
 let opportunities = [];
 let activeOpp = null;
+let marketRates = { solar: 3.5, wind: 3.2, biogas: 4.0 }; // Default rates
+
+// Function to update kWh preview based on amount and rate
+function updateKwhPreview() {
+  const amount = parseFloat(document.getElementById('inv-amount').value) || 0;
+  const rateText = document.getElementById('inv-rate').textContent;
+  const rate = parseFloat(rateText.replace('₹', '')) || 5.0;
+  const kwh = (amount / rate).toFixed(2);
+  document.getElementById('inv-kwh-preview').textContent = kwh + ' kWh';
+}
+
+// Add event listener for amount input
+document.addEventListener('DOMContentLoaded', function() {
+  const amountInput = document.getElementById('inv-amount');
+  if (amountInput) {
+    amountInput.addEventListener('input', updateKwhPreview);
+  }
+});
 
 (async function init() {
-  const [invData, wx, listings] = await Promise.all([
-    api('/api/investments/mine'),
-    api('/api/weather'),
-    api('/api/listings')
-  ]);
-  myInvestments = invData.investments || invData || [];
-  opportunities = (listings.listings || listings || []).slice(0, 8);
-  updateMetrics();
-  renderRecentInvestments();
-  renderOpportunities();
-  updateMarketRates(wx);
-  loadPlatformStats();
+  try {
+    const [invData, wx, listings] = await Promise.all([
+      api('/api/investments/mine'),
+      api('/api/weather'),
+      api('/api/listings')
+    ]);
+    
+    myInvestments = Array.isArray(invData) ? invData : (invData.investments || []);
+    opportunities = (listings.listings || listings || []).slice(0, 8);
+    
+    // Update market rates with weather data
+    updateMarketRates(wx);
+    
+    updateMetrics();
+    renderRecentInvestments();
+    renderOpportunities();
+    loadPlatformStats();
+  } catch (error) {
+    console.error('Init error:', error);
+  }
 })();
 
 function updateMetrics() {
-  const total = myInvestments.reduce((s,i)=>s+(i.amount||0),0);
-  const returns = myInvestments.reduce((s,i)=>s+(i.returns||0),0);
+  const total = myInvestments.reduce((s,i)=>s+(i.amount_inr || i.amount || 0),0);
+  const returns = myInvestments.reduce((s,i)=>s+(i.returns || 0),0);
   const roi = total > 0 ? ((returns/total)*100).toFixed(1) : '0.0';
+  
   document.getElementById('m-invested').textContent = '₹'+total.toLocaleString('en-IN');
   document.getElementById('m-inv-sub').textContent = myInvestments.length+' investments';
   document.getElementById('m-returns').textContent = '₹'+returns.toLocaleString('en-IN');
@@ -376,11 +422,14 @@ function updateMetrics() {
 
   // Portfolio breakdown
   const byType = {solar:0, wind:0, biogas:0};
-  myInvestments.forEach(i => { byType[i.energy_type||'solar'] += i.amount||0; });
+  myInvestments.forEach(i => { 
+    const type = (i.energy_type || 'solar').toLowerCase();
+    byType[type] += i.amount_inr || i.amount || 0; 
+  });
   const totalAmt = Object.values(byType).reduce((a,b)=>a+b,1);
-  document.getElementById('dl-solar').textContent = Math.round(byType.solar/totalAmt*100)+'%';
-  document.getElementById('dl-wind').textContent = Math.round(byType.wind/totalAmt*100)+'%';
-  document.getElementById('dl-biogas').textContent = Math.round(byType.biogas/totalAmt*100)+'%';
+  document.getElementById('dl-solar').textContent = Math.round((byType.solar/totalAmt)*100)+'%';
+  document.getElementById('dl-wind').textContent = Math.round((byType.wind/totalAmt)*100)+'%';
+  document.getElementById('dl-biogas').textContent = Math.round((byType.biogas/totalAmt)*100)+'%';
 }
 
 function renderRecentInvestments() {
@@ -393,17 +442,21 @@ function renderRecentInvestments() {
   c.innerHTML = recent.map(i => {
     const icons = {solar:'☀️',wind:'💨',biogas:'🌿'};
     const colors = {solar:'var(--gold)',wind:'var(--cyan)',biogas:'var(--green)'};
+    const type = (i.energy_type || 'solar').toLowerCase();
+    const amount = i.amount_inr || i.amount || 0;
+    const roiPct = i.return_rate || i.roi_pct || 8.5;
+    
     return `<div style="display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--bg2);border-radius:8px;border:1px solid var(--border)">
       <div style="display:flex;align-items:center;gap:10px">
-        <div style="font-size:18px">${icons[i.energy_type||'solar']}</div>
+        <div style="font-size:18px">${icons[type] || '📈'}</div>
         <div>
-          <div style="font-family:'Mulish',sans-serif;font-size:13px;font-weight:600">${i.project_name||'Energy Project'}</div>
-          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-faint)">${i.energy_type||'solar'} · ${new Date(i.created_at||Date.now()).toLocaleDateString()}</div>
+          <div style="font-family:'Mulish',sans-serif;font-size:13px;font-weight:600">${i.project_name || 'Energy Project'}</div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--text-faint)">${type} · ${new Date(i.created_at||Date.now()).toLocaleDateString()}</div>
         </div>
       </div>
       <div style="text-align:right">
-        <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:${colors[i.energy_type||'solar']}">₹${(i.amount||0).toLocaleString('en-IN')}</div>
-        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--green)">${i.roi_pct||'12'}% ROI</div>
+        <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:${colors[type] || 'var(--A)'}">₹${amount.toLocaleString('en-IN')}</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--green)">${roiPct}% ROI</div>
       </div>
     </div>`;
   }).join('');
@@ -411,108 +464,224 @@ function renderRecentInvestments() {
 
 function renderOpportunities() {
   const c = document.getElementById('opp-grid');
-  const mockOpps = opportunities.length ? opportunities : [
-    {id:'o1',name:'SolarFarm Alpha',energy_type:'solar',seeking:500000,raised:320000,roi_pct:14,lock_months:6},
-    {id:'o2',name:'WindPark Beta',energy_type:'wind',seeking:800000,raised:450000,roi_pct:16,lock_months:12},
-    {id:'o3',name:'BioGas Gamma',energy_type:'biogas',seeking:300000,raised:280000,roi_pct:11,lock_months:6},
-    {id:'o4',name:'SolarPark Delta',energy_type:'solar',seeking:1000000,raised:200000,roi_pct:15,lock_months:18},
-  ];
-  c.innerHTML = mockOpps.map(o => {
-    const seeking = o.seeking || o.available_kwh*1000 || 500000;
-    const raised = o.raised || Math.round(seeking * 0.6);
-    const pct = Math.round((raised/seeking)*100);
-    const roi = o.roi_pct || 12;
-    return `<div class="opp-card">
-      <div class="opp-header">
-        <div class="opp-name">${o.name||'Energy Project'}</div>
-        <div class="opp-type ${o.energy_type||'solar'}">${o.energy_type||'solar'}</div>
-      </div>
-      <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--text-faint);margin-bottom:4px">SEEKING</div>
-      <div class="opp-raise">₹${(seeking/100000).toFixed(1)}L</div>
-      <div class="opp-progress-bg"><div class="opp-progress-fill" style="width:${pct}%"></div></div>
-      <div class="opp-meta">
-        <span>${pct}% funded · ₹${(raised/100000).toFixed(1)}L raised</span>
-        <span>ROI: ${roi}%</span>
-      </div>
-      <button class="opp-invest-btn" onclick="openInvestModal(${JSON.stringify(o).replace(/"/g,'&quot;')})">📈 Invest</button>
-    </div>`;
-  }).join('');
+  
+  if (opportunities.length > 0) {
+    c.innerHTML = opportunities.map(o => {
+      const seeking = o.available_kwh * 1000 || 500000;
+      const raised = Math.round(seeking * 0.4);
+      const pct = Math.round((raised/seeking)*100);
+      const roi = 8.5 + (o.energy_type === 'solar' ? 2 : o.energy_type === 'wind' ? 3 : 1);
+      
+      return `<div class="opp-card">
+        <div class="opp-header">
+          <div class="opp-name">${o.producer_name || 'Energy Project'}</div>
+          <div class="opp-type ${o.energy_type||'solar'}">${o.energy_type||'solar'}</div>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--text-faint);margin-bottom:4px">SEEKING</div>
+        <div class="opp-raise">₹${(seeking/100000).toFixed(1)}L</div>
+        <div class="opp-progress-bg"><div class="opp-progress-fill" style="width:${pct}%"></div></div>
+        <div class="opp-meta">
+          <span>${pct}% funded · ₹${(raised/100000).toFixed(1)}L raised</span>
+          <span>ROI: ${roi.toFixed(1)}%</span>
+        </div>
+        <button class="opp-invest-btn" onclick="openInvestModal({
+          id: '${o.id}',
+          name: '${o.producer_name || 'Energy Project'}',
+          energy_type: '${o.energy_type || 'solar'}',
+          roi_pct: ${roi},
+          lock_months: 6,
+          rate_per_kwh: ${o.current_price || marketRates[o.energy_type] || 5.0}
+        })">📈 Invest</button>
+      </div>`;
+    }).join('');
+  } else {
+    const mockOpps = [
+      {id:'o1',name:'SolarFarm Alpha',energy_type:'solar',roi_pct:14,lock_months:6,rate_per_kwh:3.2},
+      {id:'o2',name:'WindPark Beta',energy_type:'wind',roi_pct:16,lock_months:12,rate_per_kwh:2.8},
+      {id:'o3',name:'BioGas Gamma',energy_type:'biogas',roi_pct:11,lock_months:6,rate_per_kwh:4.0},
+      {id:'o4',name:'SolarPark Delta',energy_type:'solar',roi_pct:15,lock_months:18,rate_per_kwh:3.5},
+    ];
+    
+    c.innerHTML = mockOpps.map(o => {
+      return `<div class="opp-card">
+        <div class="opp-header">
+          <div class="opp-name">${o.name}</div>
+          <div class="opp-type ${o.energy_type}">${o.energy_type}</div>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:8px;color:var(--text-faint);margin-bottom:4px">SEEKING</div>
+        <div class="opp-raise">₹5.0L</div>
+        <div class="opp-progress-bg"><div class="opp-progress-fill" style="width:40%"></div></div>
+        <div class="opp-meta">
+          <span>40% funded · ₹2.0L raised</span>
+          <span>ROI: ${o.roi_pct}%</span>
+        </div>
+        <button class="opp-invest-btn" onclick="openInvestModal(${JSON.stringify(o).replace(/"/g,'&quot;')})">📈 Invest</button>
+      </div>`;
+    }).join('');
+  }
 }
 
 function updateMarketRates(wx) {
-  const cloud = wx?.clouds||30, wind = (wx?.wind_speed||2)*3.6;
-  let solar = Math.max(1.5, Math.min(12, 3.20 + (cloud<20?-1.5:cloud>70?2.5:0) - 0.50));
-  let windR = Math.max(1.5, Math.min(12, 3.80 + (wind>25?-2.5:wind<5?2.2:0) - 0.30));
-  let biogas = 4.30;
-  document.getElementById('md-solar').textContent = '₹'+solar.toFixed(2);
-  document.getElementById('md-wind').textContent = '₹'+windR.toFixed(2);
-  document.getElementById('md-biogas').textContent = '₹'+biogas.toFixed(2);
+  if (!wx) return;
+  
+  const cloud = wx?.clouds || 30;
+  const wind = wx?.wind_speed || 14.4;
+  
+  // Calculate weather-adjusted rates
+  marketRates.solar = Math.max(1.5, Math.min(12, 3.20 + (cloud<20 ? -1.5 : cloud>70 ? 2.5 : 0) - 0.50));
+  marketRates.wind = Math.max(1.5, Math.min(12, 3.80 + (wind>25 ? -2.5 : wind<5 ? 2.2 : 0) - 0.30));
+  marketRates.biogas = 4.30;
+  
+  document.getElementById('md-solar').textContent = '₹'+marketRates.solar.toFixed(2);
+  document.getElementById('md-wind').textContent = '₹'+marketRates.wind.toFixed(2);
+  document.getElementById('md-biogas').textContent = '₹'+marketRates.biogas.toFixed(2);
 }
 
 async function loadPlatformStats() {
-  const data = await api('/api/transactions?limit=1000');
-  const txs = data.transactions || data || [];
-  const kwh = txs.reduce((s,t)=>s+(t.kwh||0),0);
-  const co2 = (kwh*0.82).toFixed(0);
-  const producers = new Set(txs.map(t=>t.producer_id)).size;
-  document.getElementById('stat-kwh').textContent = (kwh/1000).toFixed(1)+'k';
-  document.getElementById('stat-producers').textContent = producers || '--';
-  document.getElementById('stat-co2').textContent = (co2/1000).toFixed(1)+'k';
-  document.getElementById('rep-kwh').textContent = kwh+' kWh';
-  document.getElementById('rep-co2').textContent = co2+' kg';
+  try {
+    const data = await api('/api/transactions?limit=1000');
+    const txs = data.transactions || data || [];
+    const kwh = txs.reduce((s,t)=>s+(t.kwh||0),0);
+    const co2 = (kwh*0.82).toFixed(0);
+    const producers = new Set(txs.map(t=>t.producer_id)).size;
+    
+    document.getElementById('stat-kwh').textContent = (kwh/1000).toFixed(1)+'k';
+    document.getElementById('stat-producers').textContent = producers || '--';
+    document.getElementById('stat-co2').textContent = (co2/1000).toFixed(1)+'k';
+    document.getElementById('rep-kwh').textContent = kwh+' kWh';
+    document.getElementById('rep-co2').textContent = co2+' kg';
+  } catch (error) {
+    console.error('Error loading platform stats:', error);
+  }
 }
 
 let activeOppData = null;
+
 function openInvestModal(opp) {
   activeOppData = opp;
-  document.getElementById('inv-proj-name').textContent = opp.name||'Project';
-  document.getElementById('inv-roi-preview').textContent = (opp.roi_pct||12)+'%';
-  document.getElementById('inv-lock').textContent = (opp.lock_months||6)+' months';
+  document.getElementById('inv-proj-name').textContent = opp.name || 'Project';
+  document.getElementById('inv-roi-preview').textContent = (opp.roi_pct || 12) + '%';
+  document.getElementById('inv-lock').textContent = (opp.lock_months || 6) + ' months';
+  
+  // Set the rate per kWh
+  const rate = opp.rate_per_kwh || marketRates[opp.energy_type] || 5.0;
+  document.getElementById('inv-rate').textContent = '₹' + rate.toFixed(2);
+  
+  // Reset amount and update preview
+  document.getElementById('inv-amount').value = '5000';
+  updateKwhPreview();
+  
   document.getElementById('invest-modal').classList.add('open');
 }
-function closeInvestModal() { document.getElementById('invest-modal').classList.remove('open'); }
+
+function closeInvestModal() { 
+  document.getElementById('invest-modal').classList.remove('open'); 
+}
 
 async function confirmInvest() {
-  if (!activeOppData) return;
-  const amount = parseFloat(document.getElementById('inv-amount').value)||5000;
-  const res = await api('/api/investments', {
-    method:'POST', body: JSON.stringify({
+  if (!activeOppData) {
+    toast('Please select a project first', false);
+    return;
+  }
+  
+  const amount = parseFloat(document.getElementById('inv-amount').value);
+  if (isNaN(amount) || amount < 1000) {
+    toast('Minimum investment is ₹1000', false);
+    return;
+  }
+  
+  const ratePerKwh = parseFloat(document.getElementById('inv-rate').textContent.replace('₹', ''));
+  
+  const btn = document.querySelector('#invest-modal .btn-confirm');
+  const originalText = btn.textContent;
+  btn.textContent = 'PROCESSING...';
+  btn.disabled = true;
+
+  try {
+    const payload = {
       listing_id: activeOppData.id,
-      project_name: activeOppData.name,
-      amount, energy_type: activeOppData.energy_type,
-      roi_pct: activeOppData.roi_pct||12
-    })
-  });
-  if (res.success || res.investment) {
-    myInvestments.unshift(res.investment||{amount, energy_type:activeOppData.energy_type, project_name:activeOppData.name, roi_pct:activeOppData.roi_pct||12});
-    updateMetrics(); renderRecentInvestments();
-    closeInvestModal(); toast(`📈 Invested ₹${amount.toLocaleString('en-IN')} in ${activeOppData.name}!`);
-  } else toast('Investment failed. Try again.', false);
+      amount: amount,
+      rate_per_kwh: ratePerKwh,
+      energy_type: activeOppData.energy_type || 'solar'
+    };
+    
+    console.log('Sending investment payload:', payload);
+    
+    const res = await api('/api/investments', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    });
+    
+    if (res.success) {
+      const newInv = {
+        id: 'inv_' + Date.now(),
+        amount_inr: amount,
+        rate_per_kwh: ratePerKwh,
+        kwh_funded: amount / ratePerKwh,
+        energy_type: activeOppData.energy_type || 'solar',
+        project_name: activeOppData.name,
+        return_rate: activeOppData.roi_pct || 8.5,
+        created_at: new Date().toISOString()
+      };
+      
+      myInvestments.unshift(newInv);
+      updateMetrics();
+      renderRecentInvestments();
+      closeInvestModal();
+      toast(`📈 Successfully invested ₹${amount.toLocaleString('en-IN')} in ${activeOppData.name}!`);
+      
+      setTimeout(() => loadInvestments(), 500);
+    } else {
+      console.error('Investment failed:', res);
+      toast(res.error || 'Investment failed. Try again.', false);
+    }
+  } catch (error) {
+    console.error('Investment error:', error);
+    toast('Investment failed: ' + error.message, false);
+  } finally {
+    btn.textContent = originalText;
+    btn.disabled = false;
+  }
 }
 
 async function loadInvestments() {
-  const data = await api('/api/investments/mine');
-  myInvestments = data.investments || data || [];
-  updateMetrics(); renderRecentInvestments();
-  const c = document.getElementById('inv-list');
-  if (!myInvestments.length) {
-    c.innerHTML = '<div style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--text-faint);text-align:center;padding:30px">No investments yet.</div>';
-    return;
+  try {
+    const data = await api('/api/investments/mine');
+    myInvestments = Array.isArray(data) ? data : (data.investments || []);
+    updateMetrics(); 
+    renderRecentInvestments();
+    
+    const c = document.getElementById('inv-list');
+    if (!myInvestments.length) {
+      c.innerHTML = '<div style="font-family:IBM Plex Mono,monospace;font-size:10px;color:var(--text-faint);text-align:center;padding:30px">No investments yet.</div>';
+      return;
+    }
+    
+    c.innerHTML = myInvestments.map(i => {
+      const icons = {solar:'☀️',wind:'💨',biogas:'🌿'};
+      const type = (i.energy_type || 'solar').toLowerCase();
+      const amount = i.amount_inr || i.amount || 0;
+      const returns = i.returns || 0;
+      const roiPct = i.return_rate || i.roi_pct || 8.5;
+      const kwhFunded = i.kwh_funded || (amount / (i.rate_per_kwh || 5.0)).toFixed(2);
+      
+      return `<div class="inv-card">
+        <div class="inv-header">
+          <div class="inv-name">${icons[type] || '📈'} ${i.project_name || 'Energy Project'}</div>
+          <div class="inv-roi">${roiPct}% ROI</div>
+        </div>
+        <div class="inv-stats">
+          <div class="inv-stat">INVESTED<span>₹${amount.toLocaleString('en-IN')}</span></div>
+          <div class="inv-stat">RETURNS<span style="color:var(--green)">₹${returns.toLocaleString('en-IN')}</span></div>
+          <div class="inv-stat">kWh FUNDED<span style="color:var(--cyan)">${typeof kwhFunded === 'number' ? kwhFunded.toFixed(2) : kwhFunded} kWh</span></div>
+          <div class="inv-stat">RATE<span style="color:var(--gold)}">₹${(i.rate_per_kwh || 5.0).toFixed(2)}/kWh</span></div>
+          <div class="inv-stat">DATE<span>${new Date(i.created_at||Date.now()).toLocaleDateString()}</span></div>
+        </div>
+      </div>`;
+    }).join('');
+  } catch (error) {
+    console.error('Error loading investments:', error);
   }
-  c.innerHTML = myInvestments.map(i => {
-    const icons = {solar:'☀️',wind:'💨',biogas:'🌿'};
-    return `<div class="inv-card">
-      <div class="inv-header">
-        <div class="inv-name">${icons[i.energy_type||'solar']} ${i.project_name||'Energy Project'}</div>
-        <div class="inv-roi">${i.roi_pct||12}% ROI</div>
-      </div>
-      <div class="inv-stats">
-        <div class="inv-stat">INVESTED<span>₹${(i.amount||0).toLocaleString('en-IN')}</span></div>
-        <div class="inv-stat">RETURNS<span style="color:var(--green)">₹${(i.returns||0).toLocaleString('en-IN')}</span></div>
-        <div class="inv-stat">DATE<span>${new Date(i.created_at||Date.now()).toLocaleDateString()}</span></div>
-      </div>
-    </div>`;
-  }).join('');
 }
 
 const headings = {
@@ -522,6 +691,7 @@ const headings = {
   market:'Market <span>Data</span>',
   reports:'Investment <span>Reports</span>'
 };
+
 function goTo(sec, el) {
   document.querySelectorAll('.page-sec').forEach(s=>s.classList.remove('on'));
   document.getElementById('s-'+sec)?.classList.add('on');
@@ -534,12 +704,14 @@ function goTo(sec, el) {
 
 function showLogout() { document.getElementById('logout-modal').classList.add('open'); }
 function closeLogout() { document.getElementById('logout-modal').classList.remove('open'); }
+
 function confirmLogout() {
   fetch('/api/auth/logout',{method:'POST',headers:{'Authorization':'Bearer '+token}}).finally(()=>{
     localStorage.removeItem('nx_user'); localStorage.removeItem('nx_token');
     window.location.href = '/';
   });
 }
+
 function toast(msg, ok=true) {
   const el = document.getElementById('toast');
   el.style.borderColor = ok?'var(--A)':'var(--rose)';
